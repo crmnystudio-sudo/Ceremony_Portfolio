@@ -1,0 +1,59 @@
+/* Ceremony - EXPERIMENTAL rainbow gradient hover.
+   ------------------------------------------------------------------
+   To revert: delete the <link ... rainbow.css> tag from the pages.
+   Nothing else references this file, so removing the link fully undoes it.
+   Originals are also saved under Portfolio/_backup/.
+
+   Performance notes:
+   - The animation only exists in the :hover rule, so there is zero cost while
+     idle. Nothing animates until you actually point at something.
+   - Only background-position animates (a single cheap paint on a small text
+     box). No layout, no shadows, no filters.
+   - `-webkit-text-fill-color` is used instead of `color: transparent` so that
+     `currentColor` still resolves - the inline SVG contact icons keep their
+     stroke and stay visible.
+   - No `will-change`: these are small elements and promoting every nav item to
+     its own compositor layer would cost more memory than it saves.
+*/
+
+/* Single source of truth for the palette. dividers.js reads this to build the
+   matching SVG gradient for the divider lines; if this stylesheet is removed the
+   variable disappears and the dividers fall back to the plain grey stroke. */
+:root {
+  --rainbow-stops: #ff3b30, #ff9500, #ffcc00, #34c759, #00c7be, #007aff, #af52de, #ff3b30;
+}
+
+.nav-links a,
+.nav-logo,
+.contact-list a,
+button {
+  background-image: linear-gradient(90deg, var(--rainbow-stops));
+  background-size: 200% auto;
+  background-position: 0% center;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Hover: reveal the gradient through the glyphs and slide it. */
+.nav-links a:hover,
+.nav-brand:hover .nav-logo,
+.contact-list a:hover,
+button:hover {
+  opacity: 1;                              /* beat the existing fade-out */
+  -webkit-text-fill-color: transparent;
+  animation: rainbow-slide 2.2s linear infinite;
+}
+
+@keyframes rainbow-slide {
+  to { background-position: 200% center; }
+}
+
+/* Reduced motion: keep the colour, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .nav-links a:hover,
+  .nav-brand:hover .nav-logo,
+  .contact-list a:hover,
+  button:hover {
+    animation: none;
+  }
+}

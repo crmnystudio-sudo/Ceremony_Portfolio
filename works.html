@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Works - Ceremony</title>
+  <link rel="icon" href="Assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="Assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="Assets/favicon-180.png">
+  <script src="auth.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Palatino Linotype';
+      src: url('Assets/palatino-linotype/Palatino Linotype.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Palatino Linotype';
+      src: url('Assets/palatino-linotype/palab.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cream: #ffffff;
+      --ink: #1a1a1a;
+      --mid: #888;
+      --gap: 6px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2.5rem 3rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--cream);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-gif {
+      width: 6.75rem;
+      height: 6.75rem;
+      object-fit: contain;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .nav-logo {
+      font-size: 2.25rem;
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: baseline;
+    }
+
+    .nav-links a {
+      font-size: 1.5rem;
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover { opacity: 0.35; }
+
+    /* WORK SECTION */
+    #work {
+      padding: 2.45rem var(--gap) 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--gap);
+    }
+
+    .grid-item {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #e8e5df;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .grid-item video,
+    .grid-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .grid-item:hover video,
+    .grid-item:hover img {
+      transform: scale(1.03);
+    }
+
+    .grid-item .tag {
+      position: absolute;
+      top: 0.6rem;
+      left: 0.6rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #f4f1ec;
+      background: rgba(26, 26, 26, 0.55);
+      padding: 0.2rem 0.5rem;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .grid-item:hover .tag { opacity: 1; }
+
+    .grid-item .caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 1.75rem 0.75rem 0.6rem;
+      font-size: 0.72rem;
+      color: #f4f1ec;
+      background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+      line-height: 1.3;
+    }
+
+    .grid-item:hover .caption { opacity: 1; }
+
+    /* CASE STUDY MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      z-index: 200;
+      overflow-y: auto;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem;
+      animation: slideUp 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-close {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: var(--ink);
+      transition: opacity 0.2s ease;
+      z-index: 201;
+    }
+
+    .modal-close:hover { opacity: 0.5; }
+
+    .case-study {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      width: 100%;
+    }
+
+    .case-study-media {
+      width: 100%;
+      min-height: 400px;
+      aspect-ratio: var(--aspect-ratio, 16 / 9);
+      background: #e8e5df;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    .case-study-media video,
+    .case-study-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .case-study-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #d8d4ce;
+    }
+
+    .gallery-item {
+      aspect-ratio: 1 / 1;
+      background: #e8e5df;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .gallery-item:hover {
+      opacity: 0.8;
+    }
+
+    .gallery-item img,
+    .gallery-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: #888;
+      text-align: center;
+      padding: 0.5rem;
+    }
+
+    .case-study-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .case-study-header {
+      border-bottom: 1px solid #d8d4ce;
+      padding-bottom: 1.5rem;
+    }
+
+    .case-study-title {
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .case-study-meta {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.5rem;
+    }
+
+    .case-study-client {
+      font-size: 1rem;
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    .case-study-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .case-study-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      font-weight: 700;
+    }
+
+    .case-study-value {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .case-study-description {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #444;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #d8d4ce;
+      margin-top: 6rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .footer-mid {
+      flex: 1;
+      text-align: center;
+    }
+
+    footer span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+      .nav-links a { font-size: 1.425rem; }
+      .nav-logo { font-size: 2.1375rem; }
+      .nav-links { gap: 1.5rem; }
+      .case-study { grid-template-columns: 1fr; gap: 2.5rem; }
+      .modal-content { padding: 4rem 2rem; }
+    }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links a { font-size: 1.275rem; }
+      .nav-logo { font-size: 1.9125rem; }
+      .nav-gif { width: 5.4rem; height: 5.4rem; }
+      .nav-links { gap: 1rem; }
+      .modal-content { padding: 2rem 1.5rem; min-height: auto; }
+      .case-study { gap: 2rem; }
+      .case-study-title { font-size: 1.5rem; }
+      .case-study-media { min-height: 300px; }
+      .footer-mid { display: none; }
+    }
+  </style>
+  <link rel="stylesheet" href="rainbow.css">
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('load', () => window.scrollTo(0, 0));
+  </script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="home.html">
+      <img class="nav-gif" src="Assets/CRMNY_GIF_5fps.gif" alt="" onerror="this.src='Assets/favicon-32.png'">
+      <span class="nav-logo">ceremony.</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="home.html?t=1">home</a></li>
+      <li><a href="works.html?t=1">works</a></li>
+      <li><a href="about.html?t=1">about</a></li>
+      <li><a href="contact.html?t=1">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- WORK GRID -->
+  <section id="work">
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- CASE STUDY MODAL -->
+  <div class="modal" id="caseStudyModal">
+    <button class="modal-close" onclick="closeCaseStudy()">&times;</button>
+    <div class="modal-content" id="caseStudyContent"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Ceremony</span>
+    <span class="footer-mid">thanks for watching</span>
+    <span>&copy; 2026</span>
+  </footer>
+
+  <script src="project-loader.js"></script>
+  <script>
+    async function initWorks() {
+      await projectManager.init();
+      const projects = projectManager.getAll();
+      const grid = document.getElementById('grid');
+
+      projects.forEach(project => {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.style.cursor = 'pointer';
+
+        const isVideo = projectManager.isVideo(project);
+        let media;
+
+        if (isVideo) {
+          media = document.createElement('video');
+          media.muted = true;
+          media.preload = 'none';
+          media.poster = project.thumbnail_path;
+        } else {
+          media = document.createElement('img');
+          media.src = project.thumbnail_path;
+          media.alt = project.title;
+          media.onerror = () => { media.src = 'Assets/favicon-32.png'; };
+        }
+
+        item.appendChild(media);
+
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.textContent = project.client;
+        item.appendChild(tag);
+
+        const caption = document.createElement('span');
+        caption.className = 'caption';
+        caption.textContent = project.title;
+        item.appendChild(caption);
+
+        item.addEventListener('click', () => showCaseStudy(project));
+        grid.appendChild(item);
+      });
+    }
+
+    function showCaseStudy(project) {
+      const modal = document.getElementById('caseStudyModal');
+      const content = document.getElementById('caseStudyContent');
+      const isVideo = projectManager.isVideo(project);
+
+      // Default aspect ratio
+      let aspectRatio = project.aspect_ratio || '16 / 9';
+
+      let mediaHtml = '';
+      if (isVideo) {
+        mediaHtml = `<video id="caseStudyVideo" controls style="width: 100%; height: auto;"><source src="${project.video_link}" type="video/mp4"></video>`;
+      } else {
+        mediaHtml = `<img src="${project.video_link}" style="width: 100%; height: auto;" onerror="this.src='Assets/favicon-32.png'">`;
+      }
+
+      // Gallery items - 5 placeholder spots for additional images/videos
+      let galleryHtml = '<div class="case-study-gallery">';
+      for (let i = 0; i < 5; i++) {
+        galleryHtml += `
+          <div class="gallery-item" title="Gallery image ${i + 1}">
+            <div class="gallery-placeholder">+</div>
+          </div>
+        `;
+      }
+      galleryHtml += '</div>';
+
+      content.innerHTML = `
+        <div class="case-study">
+          <div class="case-study-media" id="caseStudyMedia" style="--aspect-ratio: ${aspectRatio};">${mediaHtml}</div>
+          <div class="case-study-info">
+            <div class="case-study-header">
+              <h1 class="case-study-title">${project.title}</h1>
+              <div class="case-study-meta">Client</div>
+              <div class="case-study-client">${project.client}</div>
+            </div>
+
+            <div class="case-study-field">
+              <div class="case-study-label">Agency</div>
+              <div class="case-study-value">${project.agency}</div>
+            </div>
+
+            <div class="case-study-field">
+              <div class="case-study-label">Year</div>
+              <div class="case-study-value">${project.year}</div>
+            </div>
+
+            <div class="case-study-field">
+              <div class="case-study-label">Team Members</div>
+              <div class="case-study-value">${project.team_members}</div>
+            </div>
+
+            <div class="case-study-field">
+              <div class="case-study-label">Skills & Expertise</div>
+              <div class="case-study-value">${project.skills}</div>
+            </div>
+
+            <div class="case-study-field">
+              <div class="case-study-label">About this project</div>
+              <div class="case-study-description">${project.description}</div>
+            </div>
+
+            ${galleryHtml}
+          </div>
+        </div>
+      `;
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      // Detect video dimensions and set aspect ratio
+      if (isVideo) {
+        const video = document.getElementById('caseStudyVideo');
+        const media = document.getElementById('caseStudyMedia');
+
+        const setAspectRatio = () => {
+          if (video.videoWidth && video.videoHeight) {
+            const ratio = video.videoWidth / video.videoHeight;
+            media.style.setProperty('--aspect-ratio', `${video.videoWidth} / ${video.videoHeight}`);
+          }
+        };
+
+        // Try to get dimensions when metadata loads
+        if (video.readyState >= 1) {
+          setAspectRatio();
+        } else {
+          video.addEventListener('loadedmetadata', setAspectRatio, { once: true });
+        }
+      }
+    }
+
+    function closeCaseStudy() {
+      const modal = document.getElementById('caseStudyModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('caseStudyModal').addEventListener('click', (e) => {
+      if (e.target.id === 'caseStudyModal') closeCaseStudy();
+    });
+
+    // Keyboard escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCaseStudy();
+    });
+
+    initWorks();
+  </script>
+
+  <script src="cursor.js"></script>
+
+</body>
+</html>

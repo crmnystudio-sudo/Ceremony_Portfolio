@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ceremony</title>
+  <link rel="icon" href="Assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="Assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="Assets/favicon-180.png">
+  <script src="auth.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Palatino Linotype';
+      src: url('Assets/palatino-linotype/Palatino Linotype.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Palatino Linotype';
+      src: url('Assets/palatino-linotype/palab.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cream: #ffffff;
+      --ink: #1a1a1a;
+      --mid: #888;
+      --gap: 6px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ────────────────────────────────
+       NAV
+    ──────────────────────────────── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2.5rem 3rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--cream);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-gif {
+      width: 6.75rem;
+      height: 6.75rem;
+      object-fit: contain;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .nav-logo {
+      font-size: 2.25rem;
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: baseline;
+    }
+
+    .nav-links a {
+      font-size: 1.5rem;
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover { opacity: 0.35; }
+
+    /* ────────────────────────────────
+       WORK GRID (uniform square tiles)
+    ──────────────────────────────── */
+    #work {
+      padding: 2.45rem var(--gap) 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--gap);
+    }
+
+    .grid-item {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #e8e5df;
+      cursor: pointer;
+    }
+
+    .grid-item video,
+    .grid-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .grid-item:hover video,
+    .grid-item:hover img {
+      transform: scale(1.03);
+    }
+
+    .grid-item .tag {
+      position: absolute;
+      top: 0.6rem;
+      left: 0.6rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #f4f1ec;
+      background: rgba(26, 26, 26, 0.55);
+      padding: 0.2rem 0.5rem;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .grid-item:hover .tag { opacity: 1; }
+
+    .grid-item .caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 1.75rem 0.75rem 0.6rem;
+      font-size: 0.72rem;
+      color: #f4f1ec;
+      background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+      line-height: 1.3;
+    }
+
+    .grid-item:hover .caption { opacity: 1; }
+
+    /* ────────────────────────────────
+       ABOUT
+    ──────────────────────────────── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 6rem;
+      border-top: 1px solid #d8d4ce;
+    }
+
+    .about-text {
+      padding: 3rem 2.5rem 3rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.25rem;
+    }
+
+    .about-meta {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .about-text h2 {
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.2;
+    }
+
+    .about-text p {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: #444;
+      max-width: 38ch;
+    }
+
+    .about-image {
+      overflow: hidden;
+      background: #d8d4ce;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    /* ────────────────────────────────
+       FOOTER
+    ──────────────────────────────── */
+    footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #d8d4ce;
+      margin-top: 6rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .footer-mid {
+      flex: 1;
+      text-align: center;
+    }
+
+    footer span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* ────────────────────────────────
+       RESPONSIVE
+    ──────────────────────────────── */
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+      .nav-links a { font-size: 1.425rem; }
+      .nav-logo { font-size: 2.1375rem; }
+      .nav-links { gap: 1.5rem; }
+    }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links a { font-size: 1.275rem; }
+      .nav-logo { font-size: 1.9125rem; }
+      .nav-gif { width: 5.4rem; height: 5.4rem; }
+      .nav-links { gap: 1rem; }
+      #about { grid-template-columns: 1fr; }
+      .about-image { aspect-ratio: 4 / 3; }
+      .footer-mid { display: none; }
+    }
+  </style>
+  <link rel="stylesheet" href="rainbow.css">
+  <script>
+    // Always open at the top: stop the browser restoring the previous scroll
+    // position on refresh / back-navigation.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('load', () => window.scrollTo(0, 0));
+  </script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="home.html">
+      <img class="nav-gif" src="Assets/CRMNY_GIF_5fps.gif" alt="" onerror="this.src='Assets/favicon-32.png'">
+      <span class="nav-logo">ceremony.</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="home.html?t=1">home</a></li>
+      <li><a href="works.html?t=1">works</a></li>
+      <li><a href="about.html?t=1">about</a></li>
+      <li><a href="contact.html?t=1">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- WORK GRID -->
+  <section id="work">
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Ceremony</span>
+    <span class="footer-mid">thanks for watching</span>
+    <span>&copy; 2026</span>
+  </footer>
+
+  <script src="project-loader.js"></script>
+  <script>
+    async function initHome() {
+      await projectManager.init();
+      const projects = projectManager.getFeatured();
+      const grid = document.getElementById('grid');
+
+      // Lazy-load each tile's media only when it's near the viewport
+      const tileIO = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          const m = e.target.querySelector('video, img');
+          if (!m) return;
+          if (e.isIntersecting) {
+            if (m.tagName === 'IMG') {
+              if (!m.getAttribute('src') && m.dataset.thumb) m.src = m.dataset.thumb;
+            } else if (m.dataset.poster) {
+              if (!m.getAttribute('poster')) m.poster = m.dataset.poster;
+            }
+          } else {
+            if (m.tagName === 'IMG') {
+              m.removeAttribute('src');
+            } else {
+              m.pause();
+              m.removeAttribute('poster');
+              m.removeAttribute('src');
+              m.load();
+            }
+          }
+        });
+      }, { rootMargin: '800px 0px' });
+
+      projects.forEach(project => {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.style.cursor = 'pointer';
+
+        const isVideo = projectManager.isVideo(project);
+        let media;
+
+        if (isVideo) {
+          media = document.createElement('video');
+          media.muted = true;
+          media.playsInline = true;
+          media.preload = 'none';
+          media.dataset.poster = project.thumbnail_path;
+
+          item.addEventListener('mouseenter', () => {
+            media.src = project.video_link;
+            media.load();
+            media.play().catch(() => {});
+          });
+          item.addEventListener('mouseleave', () => {
+            media.pause();
+            media.removeAttribute('src');
+            media.load();
+          });
+        } else {
+          media = document.createElement('img');
+          media.dataset.thumb = project.thumbnail_path;
+          media.alt = project.title;
+          media.onerror = () => { media.src = 'Assets/favicon-32.png'; };
+        }
+
+        item.appendChild(media);
+
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.textContent = project.client;
+        item.appendChild(tag);
+
+        const caption = document.createElement('span');
+        caption.className = 'caption';
+        caption.textContent = project.title;
+        item.appendChild(caption);
+
+        // Link to works page with project anchor
+        item.addEventListener('click', () => {
+          window.location.href = 'works.html?project=' + encodeURIComponent(project.title);
+        });
+
+        grid.appendChild(item);
+        tileIO.observe(item);
+      });
+    }
+
+    initHome();
+  </script>
+
+  <script src="cursor.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ceremony - About</title>
+  <link rel="icon" href="Assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="Assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="Assets/favicon-180.png">
+  <script src="auth.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Palatino Linotype';
+      src: url('Assets/palatino-linotype/Palatino Linotype.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Palatino Linotype';
+      src: url('Assets/palatino-linotype/palab.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cream: #ffffff;
+      --ink: #1a1a1a;
+      --mid: #888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+      color: var(--ink);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ────────────────────────────────
+       NAV
+    ──────────────────────────────── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2.5rem 3rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--cream);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-gif {
+      width: 6.75rem;
+      height: 6.75rem;
+      object-fit: contain;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .nav-logo {
+      font-size: 2.25rem;
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: baseline;
+    }
+
+    .nav-links a {
+      font-size: 1.5rem;
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover { opacity: 0.35; }
+
+    /* ────────────────────────────────
+       ABOUT
+    ──────────────────────────────── */
+    #about {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;   /* centre the text + headshot pair on screen */
+      padding: 4rem 2rem;
+    }
+
+    /* Animated divider: a ripple travels left to right along the line.
+       Replaces the plain border-top rules. */
+    .wave-divider {
+      width: 100%;
+      height: 22px;
+      display: block;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .wave-divider svg { width: 100%; height: 100%; display: block; }
+
+    .wave-divider path {
+      fill: none;
+      stroke: #d8d4ce;
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+    }
+
+    /* Stretch so the headshot spans the text column: top level with the title,
+       bottom level with the icon. */
+    .about-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 3.5rem;
+    }
+
+    .about-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.25rem;
+      max-width: 38ch;
+    }
+
+    .about-text h2 {
+      font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1.2;
+    }
+
+    .about-text p {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: #444;
+      max-width: 38ch;
+    }
+
+    /* Height comes from the stretch above; aspect-ratio matches the source image
+       exactly (2243x2633) so the width follows and nothing is ever cropped.
+       The img is absolutely positioned so it can't feed back into the layout. */
+    .about-image {
+      flex-shrink: 0;
+    }
+
+    /* Exact height/width are set by the fitHeadshot() script at the end of the
+       page: height matches the text column (title top -> icon bottom) and the
+       width follows the image's natural ratio, so it is never cropped. */
+    .about-image img {
+      display: block;
+    }
+
+    .page-icon {
+      width: 11.25rem;
+      height: auto;
+      display: block;
+      margin-top: 1rem;
+      align-self: center;   /* centre the icon within the text column */
+    }
+
+    /* ────────────────────────────────
+       SERVICES & CLIENTS
+    ──────────────────────────────── */
+    #services-clients {
+      padding: 3rem 5rem 3.5rem;
+    }
+
+    .services-clients-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 5rem;
+    }
+
+    .services-column, .clients-column, .tools-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tools-column {
+      justify-self: end;
+      text-align: right;
+    }
+
+    .section-meta {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 2rem;
+    }
+
+    .services-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .service-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .service-name {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .service-description {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #666;
+    }
+
+    .tools-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .tool-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .tool-name {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .tool-category {
+      font-size: 0.75rem;
+      line-height: 1.4;
+      color: #999;
+      font-style: italic;
+    }
+
+    .client-groups {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .client-group h3 {
+      font-size: 1.05rem;
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .client-group ul {
+      list-style: none;
+    }
+
+    .client-group li {
+      font-size: 0.875rem;
+      line-height: 1.95;
+      color: #444;
+      break-inside: avoid;
+    }
+
+    @media (max-width: 1400px) {
+      .services-clients-inner { gap: 4rem; }
+    }
+
+    @media (max-width: 1024px) {
+      .services-clients-inner { grid-template-columns: 1fr 1fr; gap: 3rem; }
+    }
+
+    @media (max-width: 768px) {
+      .services-clients-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    @media (max-width: 640px) {
+      #services-clients { padding: 2.5rem 1.5rem 3rem; }
+    }
+
+    /* ────────────────────────────────
+       FOOTER
+    ──────────────────────────────── */
+    footer {
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .footer-mid {
+      flex: 1;
+      text-align: center;
+    }
+
+    footer span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* ────────────────────────────────
+       RESPONSIVE
+    ──────────────────────────────── */
+    @media (max-width: 1024px) {
+      .nav-links a { font-size: 1.425rem; }
+      .nav-logo { font-size: 2.1375rem; }
+      .nav-links { gap: 1.5rem; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links a { font-size: 1.275rem; }
+      .nav-logo { font-size: 1.9125rem; }
+      .nav-gif { width: 5.4rem; height: 5.4rem; }
+      .nav-links { gap: 1rem; }
+      #about { padding: 2.5rem 1.5rem; }
+      .about-inner { flex-direction: column; align-items: flex-start; gap: 2rem; }
+      .about-image { width: 100%; max-width: 300px; aspect-ratio: auto; }
+      .about-image img { position: static; height: auto; }
+      .footer-mid { display: none; }
+    }
+  </style>
+  <link rel="stylesheet" href="rainbow.css">
+  <script>
+    // CSV data loader
+    async function loadAboutData() {
+      try {
+        const response = await fetch('data/about.csv?t=' + Date.now());
+        const csv = await response.text();
+        const data = {};
+
+        // Simple CSV parser - each line is key,value
+        csv.trim().split('\n').forEach(line => {
+          const [key, ...valueParts] = line.split(',');
+          data[key.trim()] = valueParts.join(',').trim();
+        });
+
+        // Update page content
+        document.querySelector('.about-text h2').textContent = data.heading;
+        document.querySelector('.about-text p').textContent = data.bio_text;
+        const pageIcon = document.querySelector('.page-icon');
+        pageIcon.onerror = () => { pageIcon.src = 'Assets/favicon-32.png'; };
+        pageIcon.src = data.page_icon_path;
+        const headshotImg = document.querySelector('.about-image img');
+        headshotImg.onerror = () => { headshotImg.src = 'Assets/favicon-32.png'; };
+        headshotImg.src = data.headshot_image_path;
+
+        // Collect clients for group 1
+        const group1Clients = [];
+        for (let i = 1; i <= 10; i++) {
+          const key = `client_group_1_client_${i}`;
+          if (data[key]) group1Clients.push(data[key]);
+        }
+
+        // Collect clients for group 2
+        const group2Clients = [];
+        for (let i = 1; i <= 20; i++) {
+          const key = `client_group_2_client_${i}`;
+          if (data[key]) group2Clients.push(data[key]);
+        }
+
+        // Update client groups
+        const groups = document.querySelectorAll('.client-group');
+        groups[0].querySelector('h3').textContent = data.client_group_1_title;
+        groups[0].querySelector('ul').innerHTML = group1Clients.map(c => `<li>${c}</li>`).join('');
+
+        groups[1].querySelector('h3').textContent = data.client_group_2_title;
+        groups[1].querySelector('ul').innerHTML = group2Clients.map(c => `<li>${c}</li>`).join('');
+
+        // Update services
+        const servicesList = document.getElementById('servicesList');
+        if (servicesList) {
+          let serviceHTML = '';
+          for (let i = 1; i <= 10; i++) {
+            const nameKey = `service_${i}_name`;
+            const descKey = `service_${i}_description`;
+            if (data[nameKey]) {
+              const name = data[nameKey];
+              const desc = data[descKey] || '';
+              serviceHTML += `
+                <div class="service-item">
+                  <div class="service-name">${name}</div>
+                  ${desc ? `<div class="service-description">${desc}</div>` : ''}
+                </div>
+              `;
+            }
+          }
+          servicesList.innerHTML = serviceHTML;
+        }
+
+        // Update tools
+        const toolsList = document.getElementById('toolsList');
+        if (toolsList) {
+          let toolHTML = '';
+          for (let i = 1; i <= 20; i++) {
+            const nameKey = `tool_${i}_name`;
+            const catKey = `tool_${i}_category`;
+            if (data[nameKey]) {
+              const name = data[nameKey];
+              const cat = data[catKey] || '';
+              toolHTML += `
+                <div class="tool-item">
+                  <div class="tool-name">${name}</div>
+                  ${cat ? `<div class="tool-category">${cat}</div>` : ''}
+                </div>
+              `;
+            }
+          }
+          toolsList.innerHTML = toolHTML;
+        }
+      } catch (err) {
+        console.error('Error loading about data:', err);
+      }
+    }
+
+    // Always open at the top: stop the browser restoring the previous scroll
+    // position on refresh / back-navigation.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('load', () => {
+      window.scrollTo(0, 0);
+      loadAboutData();
+    });
+
+    // Also call on DOMContentLoaded as backup
+    document.addEventListener('DOMContentLoaded', loadAboutData);
+  </script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="home.html">
+      <img class="nav-gif" src="Assets/CRMNY_GIF_5fps.gif" alt="" onerror="this.src='Assets/favicon-32.png'">
+      <span class="nav-logo">ceremony.</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="home.html?t=1">home</a></li>
+      <li><a href="works.html?t=1">works</a></li>
+      <li><a href="about.html?t=1">about</a></li>
+      <li><a href="contact.html?t=1">contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="wave-divider"></div>
+
+  <!-- ABOUT -->
+  <section id="about">
+   <div class="about-inner">
+    <div class="about-text">
+      <h2>Harrison Kett</h2>
+      <p>I am an experienced 3D designer, digital creator, and creative technologist with over a decade of industry experience. I have worked across hundreds of projects in diverse industries, collaborating with companies and clients globally to bring ideas and concepts to life through 3D animation, virtual reality, and interactive training experiences. I thrive at the intersection of design and technology, translating complex briefs into polished, production-ready outcomes.</p>
+      <img class="page-icon" src="Assets/CompletedWorks_01.png" alt="Completed works" onerror="this.src='Assets/favicon-32.png'">
+    </div>
+    <div class="about-image">
+      <img src="Assets/HarrisonKett_Ceremony_Headshot_01.jpg" alt="Harrison Kett" onerror="this.src='Assets/favicon-32.png'">
+    </div>
+   </div>
+  </section>
+
+  <div class="wave-divider"></div>
+
+  <!-- SERVICES & CLIENTS -->
+  <section id="services-clients">
+    <div class="services-clients-inner">
+      <div class="services-column">
+        <p class="section-meta">Services & Expertise</p>
+        <div class="services-list" id="servicesList"></div>
+      </div>
+      <div class="clients-column">
+        <p class="section-meta">Selected Clients</p>
+        <div class="client-groups">
+          <div class="client-group">
+            <h3>Brand &amp; Creative</h3>
+            <ul>
+              <li>DFA</li>
+              <li>Galeria</li>
+              <li>Young Henries</li>
+              <li>Cameron Studio</li>
+              <li>Spur</li>
+              <li>Teal Dee</li>
+            </ul>
+          </div>
+
+          <div class="client-group">
+            <h3>Industry &amp; Technology</h3>
+            <ul>
+              <li>Orica</li>
+              <li>Bradken</li>
+              <li>NSW Health</li>
+              <li>Transport for NSW</li>
+              <li>MGA Thermal</li>
+              <li>Youth Express</li>
+              <li>RME</li>
+              <li>John Holland</li>
+              <li>SiNAB</li>
+              <li>Sandvik</li>
+              <li>Pitcrew AI</li>
+              <li>NAMIR</li>
+              <li>AGL</li>
+              <li>Banlaw</li>
+              <li>EGA</li>
+              <li>FleetSafe</li>
+              <li>IAC</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="tools-column">
+        <p class="section-meta">Tools & Programs</p>
+        <div class="tools-list" id="toolsList"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wave-divider"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Ceremony</span>
+    <span class="footer-mid">thanks for watching</span>
+    <span>&copy; 2026</span>
+  </footer>
+
+  <script>
+    // Size the headshot so its top sits level with the "Harrison Kett" title and
+    // its bottom level with the bottom of the icon - i.e. exactly the height of
+    // the text column - while keeping its natural ratio so it is never cropped.
+    (function () {
+      const text = document.querySelector('.about-text');
+      const img  = document.querySelector('.about-image img');
+      if (!text || !img) return;
+
+      function fitHeadshot() {
+        // On narrow screens the two stack, so let the CSS handle it.
+        if (window.innerWidth <= 640) {
+          img.style.height = '';
+          img.style.width = '';
+          return;
+        }
+        const h = text.getBoundingClientRect().height;
+        const ratio = img.naturalWidth / img.naturalHeight;
+        if (!h || !ratio) return;
+        img.style.height = h + 'px';
+        img.style.width  = (h * ratio) + 'px';
+      }
+
+      if (img.complete && img.naturalWidth) fitHeadshot();
+      img.addEventListener('load', fitHeadshot);
+      window.addEventListener('resize', fitHeadshot);
+      window.addEventListener('load', fitHeadshot);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeadshot);
+    })();
+  </script>
+
+  <script src="dividers.js"></script>
+
+  <script src="cursor.js"></script>
+
+</body>
+</html>

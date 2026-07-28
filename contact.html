@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ceremony - Contact</title>
+  <link rel="icon" href="Assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="Assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="Assets/favicon-180.png">
+  <script src="auth.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Palatino Linotype';
+      src: url('Assets/palatino-linotype/Palatino Linotype.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Palatino Linotype';
+      src: url('Assets/palatino-linotype/palab.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cream: #ffffff;
+      --ink: #1a1a1a;
+      --mid: #888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+      color: var(--ink);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ────────────────────────────────
+       NAV
+    ──────────────────────────────── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2.5rem 3rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--cream);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-gif {
+      width: 6.75rem;
+      height: 6.75rem;
+      object-fit: contain;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .nav-logo {
+      font-size: 2.25rem;
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: baseline;
+    }
+
+    .nav-links a {
+      font-size: 1.5rem;
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover { opacity: 0.35; }
+
+    /* ────────────────────────────────
+       CONTACT
+    ──────────────────────────────── */
+    /* Heading sits above the details + artwork group; the whole block is
+       centred on the page, with the heading aligned to its left edge. */
+    #contact {
+      flex: 1;
+      padding: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;   /* heading centred over the details + artwork */
+      gap: 1.25rem;
+    }
+
+    .contact-heading {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .contact-inner {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    /* Every contact line shares one type treatment. */
+    .contact-list a {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1;
+      text-decoration: none;
+      color: var(--ink);
+      transition: opacity 0.2s ease;
+    }
+
+    .contact-list a:hover { opacity: 0.35; }
+
+    .contact-icon {
+      width: 1.15em;
+      height: 1.15em;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .page-icon {
+      width: 30rem;
+      height: auto;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    /* Animated divider: a jagged ripple travels left to right along the line. */
+    .wave-divider {
+      width: 100%;
+      height: 22px;
+      display: block;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .wave-divider svg { width: 100%; height: 100%; display: block; }
+
+    .wave-divider path {
+      fill: none;
+      stroke: #d8d4ce;
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+    }
+
+    /* ────────────────────────────────
+       FOOTER
+    ──────────────────────────────── */
+    footer {
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* Sits centred between the two outer items. */
+    .footer-mid {
+      flex: 1;
+      text-align: center;
+    }
+
+    /* ────────────────────────────────
+       RESPONSIVE
+    ──────────────────────────────── */
+    @media (max-width: 1024px) {
+      .nav-links a { font-size: 1.425rem; }
+      .nav-logo { font-size: 2.1375rem; }
+      .nav-links { gap: 1.5rem; }
+      .contact-inner { gap: 2.5rem; }
+      .page-icon { width: 20rem; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links a { font-size: 1.275rem; }
+      .nav-logo { font-size: 1.9125rem; }
+      .nav-gif { width: 5.4rem; height: 5.4rem; }
+      .nav-links { gap: 1rem; }
+      #contact { padding: 2.5rem 1.5rem; }
+      .contact-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2.5rem;
+      }
+      .page-icon { width: 14rem; }
+      .footer-mid { display: none; }   /* footer gets cramped on narrow screens */
+    }
+  </style>
+  <link rel="stylesheet" href="rainbow.css">
+  <script>
+    // CSV data loader
+    async function loadContactData() {
+      try {
+        const response = await fetch('data/contact.csv');
+        const csv = await response.text();
+        const data = {};
+
+        // Simple CSV parser - each line is key,value
+        csv.trim().split('\n').forEach(line => {
+          const [key, ...valueParts] = line.split(',');
+          data[key.trim()] = valueParts.join(',').trim();
+        });
+
+        // Update heading
+        document.querySelector('.contact-heading').textContent = data.heading;
+
+        // Update contact list
+        const contactList = document.querySelector('.contact-list');
+        contactList.innerHTML = '';
+
+        // Email
+        if (data.contact_email) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `mailto:${data.contact_email}`;
+          a.innerHTML = `<svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="M2.5 7.5 12 13.5l9.5-6"/></svg><span>${data.contact_email}</span>`;
+          li.appendChild(a);
+          contactList.appendChild(li);
+        }
+
+        // Instagram
+        if (data.contact_instagram) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `https://instagram.com/${data.contact_instagram.replace('@', '')}`;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.innerHTML = `<svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg><span>${data.contact_instagram}</span>`;
+          li.appendChild(a);
+          contactList.appendChild(li);
+        }
+
+        // Update page icon
+        if (data.page_icon_path) {
+          document.querySelector('.page-icon').src = data.page_icon_path;
+        }
+      } catch (err) {
+        console.error('Error loading contact data:', err);
+      }
+    }
+
+    // Always open at the top: stop the browser restoring the previous scroll
+    // position on refresh / back-navigation.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('load', () => {
+      window.scrollTo(0, 0);
+      loadContactData();
+    });
+  </script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="home.html">
+      <img class="nav-gif" src="Assets/CRMNY_GIF_5fps.gif" alt="" onerror="this.src='Assets/favicon-32.png'">
+      <span class="nav-logo">ceremony.</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="home.html?t=1">home</a></li>
+      <li><a href="works.html?t=1">works</a></li>
+      <li><a href="about.html?t=1">about</a></li>
+      <li><a href="contact.html?t=1">contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="wave-divider spiky"></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+   <div class="contact-block">
+    <h1 class="contact-heading">get in touch</h1>
+    <div class="contact-inner">
+    <ul class="contact-list">
+      <li>
+        <a href="mailto:crmny.studio@gmail.com">
+          <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2.5" y="4.5" width="19" height="15" rx="2"/>
+            <path d="M2.5 7.5 12 13.5l9.5-6"/>
+          </svg>
+          crmny.studio@gmail.com
+        </a>
+      </li>
+      <li>
+        <a href="https://instagram.com/_cere_mony_" target="_blank" rel="noopener">
+          <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5"/>
+            <circle cx="12" cy="12" r="4.4"/>
+            <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/>
+          </svg>
+          @_cere_mony_
+        </a>
+      </li>
+    </ul>
+
+    <img class="page-icon" src="Assets/Experiments_01.png" alt="Experiments" onerror="this.src='Assets/favicon-32.png'">
+    </div>
+   </div>
+  </section>
+
+  <div class="wave-divider spiky"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Ceremony</span>
+    <span class="footer-mid">thanks for watching</span>
+    <span>&copy; 2026</span>
+  </footer>
+
+  <script src="dividers.js"></script>
+  <script src="cursor.js"></script>
+
+</body>
+</html>

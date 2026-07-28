@@ -1,0 +1,55 @@
+heading,Harrison Kett
+bio_text,I am an experienced 3D designer digital creator and creative technologist with over a decade of industry experience. I have worked across hundreds of projects in diverse industries collaborating with companies and clients globally to bring ideas and concepts to life through 3D animation virtual reality and interactive training experiences. I thrive at the intersection of design and technology translating complex briefs into polished production-ready outcomes.
+page_icon_path,../Assets/CompletedWorks_01.png
+headshot_image_path,../Assets/HarrisonKett_Ceremony_Headshot_01.jpg
+client_group_1_title,Brand & Creative
+client_group_1_client_1,Death From Above
+client_group_1_client_2,Galeria
+client_group_1_client_3,Young Henries
+client_group_1_client_4,Cameron Studio
+client_group_1_client_5,Spur
+client_group_1_client_6,Teal Dee
+client_group_2_title,Industry & Technology
+client_group_2_client_1,Orica
+client_group_2_client_2,Bradken
+client_group_2_client_3,NSW Health
+client_group_2_client_4,Transport for NSW
+client_group_2_client_5,MGA Thermal
+client_group_2_client_6,Youth Express
+client_group_2_client_7,RME
+client_group_2_client_8,John Holland
+client_group_2_client_9,SiNAB
+client_group_2_client_10,Sandvik
+client_group_2_client_11,Pitcrew AI
+client_group_2_client_12,NAMIR
+client_group_2_client_13,AGL
+service_1_name,3D Animation & Visualization
+service_1_description,High-quality 3D character animation motion graphics and photorealistic visualization
+service_2_name,Virtual Reality (VR) Development
+service_2_description,Immersive VR training experiences interactive 360 environments and spatial design
+service_3_name,Interactive Design & Development
+service_3_description,Web-based interactive experiences custom tool development and real-time applications
+service_4_name,Motion Graphics & VFX
+service_4_description,Dynamic motion design visual effects and animated content for multimedia platforms
+service_5_name,Creative Direction
+service_5_description,Concept development art direction and creative strategy across digital and physical media
+service_6_name,Production Management
+service_6_description,Project coordination production oversight and delivery of complex creative workflows
+service_7_name,Client Relations & Account Management
+service_7_description,Stakeholder communication project scoping and ongoing client collaboration throughout delivery
+tool_1_name,Blender
+tool_1_category,3D & Animation
+tool_2_name,Cinema 4D
+tool_2_category,3D & Animation
+tool_3_name,After Effects
+tool_3_category,Motion & VFX
+tool_4_name,Houdini
+tool_4_category,Procedural & VFX
+tool_5_name,Unity
+tool_5_category,Game Engines
+tool_6_name,Unreal Engine
+tool_6_category,Game Engines
+tool_7_name,Figma
+tool_7_category,Design & UI
+tool_8_name,TouchDesigner
+tool_8_category,Interactive & Real-time
