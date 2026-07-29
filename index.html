@@ -14,12 +14,6 @@
       font-weight: 400;
       font-style: normal;
     }
-    @font-face {
-      font-family: 'Palatino Linotype';
-      src: url('Assets/palatino-linotype/palab.ttf') format('truetype');
-      font-weight: 700;
-      font-style: normal;
-    }
 
     *, *::before, *::after {
       margin: 0;
@@ -27,119 +21,46 @@
       box-sizing: border-box;
     }
 
-    :root {
-      --cream: #ffffff;
-      --ink: #1a1a1a;
-      --mid: #888;
-    }
-
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--cream);
+      background: #ffffff;
       font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
-      color: var(--ink);
-      overflow-x: hidden;
+      color: #1a1a1a;
       min-height: 100vh;
       display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .login-container {
+      display: flex;
       flex-direction: column;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
       align-items: center;
-      padding: 2.5rem 3rem 1rem;
-      background: var(--cream);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-gif {
-      width: 6.75rem;
-      height: 6.75rem;
-      object-fit: contain;
-      flex-shrink: 0;
-      display: block;
-    }
-
-    .nav-logo {
-      font-size: 2.25rem;
-      font-weight: 400;
-      font-style: normal;
-      text-decoration: none;
-      color: var(--ink);
-      line-height: 1;
-    }
-
-    .wave-divider {
-      width: 100%;
-      height: 22px;
-      display: block;
-      flex-shrink: 0;
-      overflow: hidden;
-    }
-
-    .wave-divider svg { width: 100%; height: 100%; display: block; }
-
-    .wave-divider path {
-      fill: none;
-      stroke: #d8d4ce;
-      stroke-width: 1;
-      vector-effect: non-scaling-stroke;
-    }
-
-    #password-container {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem 2rem;
-      gap: 4rem;
-    }
-
-    .password-inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4rem;
-      max-width: 900px;
+      gap: 2.5rem;
+      max-width: 400px;
       width: 100%;
     }
 
     .page-icon {
-      width: 30rem;
+      width: 200px;
       height: auto;
       display: block;
-      flex-shrink: 0;
+    }
+
+    .welcome-text {
+      font-size: 2rem;
+      font-weight: 400;
+      text-align: center;
+      letter-spacing: 0.05em;
     }
 
     .password-form {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-      max-width: 400px;
+      gap: 1rem;
       width: 100%;
-    }
-
-    .password-form h2 {
-      font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
-      font-size: 1.8rem;
-      font-weight: 400;
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .password-form p {
-      font-size: 0.875rem;
-      line-height: 1.7;
-      color: #666;
-      text-align: center;
     }
 
     .password-input {
@@ -147,26 +68,28 @@
       font-size: 1rem;
       border: 1px solid #ddd;
       font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
-      background: var(--cream);
-      color: var(--ink);
+      background: #ffffff;
+      color: #1a1a1a;
       transition: border-color 0.2s ease;
+      text-align: center;
     }
 
     .password-input:focus {
       outline: none;
-      border-color: var(--ink);
+      border-color: #1a1a1a;
     }
 
     .password-button {
       padding: 0.75rem 1rem;
       font-size: 1rem;
       font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
-      background: var(--ink);
-      color: var(--cream);
+      background: #1a1a1a;
+      color: #ffffff;
       border: none;
       cursor: pointer;
       transition: opacity 0.2s ease;
       font-weight: 400;
+      letter-spacing: 0.05em;
     }
 
     .password-button:hover {
@@ -178,83 +101,37 @@
       font-size: 0.85rem;
       text-align: center;
       display: none;
+      margin-top: -0.5rem;
     }
 
     .error-message.show {
       display: block;
     }
 
-    footer {
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--mid);
-    }
-
-    .footer-mid {
-      flex: 1;
-      text-align: center;
-    }
-
-    @media (max-width: 1024px) {
-      #password-container { gap: 2.5rem; }
-      .password-inner { gap: 2.5rem; }
-      .page-icon { width: 20rem; }
-    }
-
     @media (max-width: 640px) {
-      .nav-gif { width: 5.4rem; height: 5.4rem; }
-      .nav-logo { font-size: 1.9125rem; }
-      #password-container { padding: 2.5rem 1.5rem; gap: 1.5rem; }
-      .password-inner { flex-direction: column; gap: 1.5rem; }
-      .password-form { max-width: 100%; }
-      .page-icon { width: 14rem; }
-      .footer-mid { display: none; }
+      .login-container { gap: 2rem; }
+      .page-icon { width: 150px; }
+      .welcome-text { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div class="nav-brand">
-      <img class="nav-gif" src="Assets/CRMNY_GIF_5fps.gif" alt="" onerror="this.src='Assets/favicon-32.png'">
-      <span class="nav-logo">ceremony.</span>
-    </div>
-  </nav>
-
-  <div class="wave-divider"></div>
-
-  <section id="password-container">
-    <div class="password-inner">
-      <img class="page-icon" src="Assets/CompletedWorks_01.png" alt="Portfolio" onerror="this.src='Assets/favicon-32.png'">
-      <form class="password-form" onsubmit="handleLogin(event)">
-        <h2>Welcome</h2>
-        <p>Enter the password to access the portfolio</p>
-        <input
-          type="password"
-          id="passwordInput"
-          class="password-input"
-          placeholder="Password"
-          autocomplete="off"
-        >
-        <button type="button" class="password-button" onclick="handleLogin()">Enter</button>
-        <div id="errorMessage" class="error-message"></div>
-      </form>
-    </div>
-  </section>
-
-  <div class="wave-divider"></div>
-
-  <footer>
-    <span>Ceremony</span>
-    <span class="footer-mid">thanks for watching</span>
-    <span>&copy; 2026</span>
-  </footer>
-
-  <script src="dividers.js"></script>
+  <div class="login-container">
+    <img class="page-icon" src="Assets/CRMNY_GIF_5fps.gif" alt="Ceremony" onerror="this.src='Assets/favicon-32.png'">
+    <h1 class="welcome-text">welcome</h1>
+    <form class="password-form" onsubmit="handleLogin(event)">
+      <input
+        type="password"
+        id="passwordInput"
+        class="password-input"
+        placeholder="password"
+        autocomplete="off"
+      >
+      <button type="button" class="password-button" onclick="handleLogin()">enter</button>
+      <div id="errorMessage" class="error-message"></div>
+    </form>
+  </div>
   <script>
     const correctPassword = 'ceremony';
 
