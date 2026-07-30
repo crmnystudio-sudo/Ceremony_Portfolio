@@ -285,7 +285,7 @@
     }
 
     @media (max-width: 640px) {
-      nav { padding: 1rem 1rem 0.5rem; }
+      nav { padding: 0.75rem 0.75rem 0.5rem; }
 
       .nav-burger { display: flex; }
 
@@ -300,25 +300,25 @@
         border-top: 1px solid #d8d4ce;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.25s ease-out;
+        transition: max-height 0.2s ease-out;
         padding: 0;
         will-change: max-height;
       }
 
       .nav-links.active {
-        max-height: 400px;
-        padding: 0.75rem 1rem;
+        max-height: 300px;
+        padding: 0.5rem 0.75rem;
       }
 
       .nav-links a {
-        font-size: 1rem;
-        padding: 0.6rem 0;
-        border-bottom: 1px solid #e8e5df;
+        font-size: 0.9rem;
+        padding: 0.5rem 0;
+        border-bottom: none;
       }
 
       .grid { grid-template-columns: repeat(2, 1fr); }
-      .nav-logo { font-size: 1.5rem; }
-      .nav-gif { width: 4rem; height: 4rem; }
+      .nav-logo { font-size: 1.2rem; }
+      .nav-gif { width: 3.2rem; height: 3.2rem; }
       #about { grid-template-columns: 1fr; }
       .about-image { aspect-ratio: 4 / 3; }
       .footer-mid { display: none; }
