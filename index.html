@@ -112,6 +112,25 @@
       .login-container { gap: 2rem; }
       .page-icon { width: 150px; }
       .welcome-text { font-size: 1.5rem; }
+      .wave-divider { display: block; }
+    }
+
+    /* Mobile-only wave divider */
+    .wave-divider {
+      width: 100%;
+      height: 22px;
+      display: none;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .wave-divider svg { width: 100%; height: 100%; display: block; }
+
+    .wave-divider path {
+      fill: none;
+      stroke: #d8d4ce;
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
     }
   </style>
 </head>
@@ -132,6 +151,9 @@
       <div id="errorMessage" class="error-message"></div>
     </form>
   </div>
+
+  <div class="wave-divider"></div>
+
   <script>
     const correctPassword = 'ceremony';
 

@@ -441,6 +441,25 @@
       .case-study-title { font-size: 1.5rem; }
       .case-study-media { min-height: 300px; }
       .footer-mid { display: none; }
+      .wave-divider { display: block; }
+    }
+
+    /* Mobile-only wave divider */
+    .wave-divider {
+      width: 100%;
+      height: 22px;
+      display: none;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .wave-divider svg { width: 100%; height: 100%; display: block; }
+
+    .wave-divider path {
+      fill: none;
+      stroke: #d8d4ce;
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
     }
   </style>
   <link rel="stylesheet" href="rainbow.css">
@@ -469,6 +488,8 @@
       <li><a href="contact.html?t=1" onclick="closeMobileMenu()">contact</a></li>
     </ul>
   </nav>
+
+  <div class="wave-divider"></div>
 
   <!-- WORK GRID -->
   <section id="work">

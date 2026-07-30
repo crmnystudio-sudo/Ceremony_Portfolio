@@ -203,11 +203,11 @@
       flex-shrink: 0;
     }
 
-    /* Animated divider: a jagged ripple travels left to right along the line. */
+    /* Animated divider: mobile-only */
     .wave-divider {
       width: 100%;
       height: 22px;
-      display: block;
+      display: none;
       flex-shrink: 0;
       overflow: hidden;
     }
@@ -295,6 +295,7 @@
       }
       .page-icon { width: 14rem; }
       .footer-mid { display: none; }
+      .wave-divider { display: block; }
     }
   </style>
   <link rel="stylesheet" href="rainbow.css">
