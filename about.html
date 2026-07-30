@@ -103,6 +103,35 @@
 
     .nav-links a:hover { opacity: 0.35; }
 
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      gap: 0.4rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      background: none;
+      border: none;
+    }
+
+    .nav-burger span {
+      width: 1.5rem;
+      height: 2px;
+      background: var(--ink);
+      transition: 0.3s ease;
+    }
+
+    .nav-burger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+
+    .nav-burger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-burger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(8px, -8px);
+    }
+
     /* ────────────────────────────────
        ABOUT
     ──────────────────────────────── */
@@ -339,10 +368,38 @@
     }
 
     @media (max-width: 640px) {
-      .nav-links a { font-size: 1.275rem; }
+      nav { padding: 1.5rem 1.5rem 0.75rem; }
+
+      .nav-burger { display: flex; }
+
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: var(--cream);
+        border-top: 1px solid #d8d4ce;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        padding: 0;
+      }
+
+      .nav-links.active {
+        max-height: 500px;
+        padding: 1rem 1.5rem;
+      }
+
+      .nav-links a {
+        font-size: 1.25rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e8e5df;
+      }
+
       .nav-logo { font-size: 1.9125rem; }
       .nav-gif { width: 5.4rem; height: 5.4rem; }
-      .nav-links { gap: 1rem; }
       #about { padding: 2.5rem 1.5rem; }
       .about-inner { flex-direction: column; align-items: flex-start; gap: 2rem; }
       .about-image { width: 100%; max-width: 300px; aspect-ratio: auto; }
@@ -463,11 +520,16 @@
       <img class="nav-gif" src="Assets/CRMNY_GIF_5fps.gif" alt="" onerror="this.src='Assets/favicon-32.png'">
       <span class="nav-logo">ceremony.</span>
     </a>
+    <button class="nav-burger" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <ul class="nav-links">
-      <li><a href="home.html?t=1">home</a></li>
-      <li><a href="works.html?t=1">works</a></li>
-      <li><a href="about.html?t=1">about</a></li>
-      <li><a href="contact.html?t=1">contact</a></li>
+      <li><a href="home.html?t=1" onclick="closeMobileMenu()">home</a></li>
+      <li><a href="works.html?t=1" onclick="closeMobileMenu()">works</a></li>
+      <li><a href="about.html?t=1" onclick="closeMobileMenu()">about</a></li>
+      <li><a href="contact.html?t=1" onclick="closeMobileMenu()">contact</a></li>
     </ul>
   </nav>
 
@@ -583,6 +645,25 @@
   </script>
 
   <script src="dividers.js"></script>
+
+  <script>
+    function toggleMobileMenu() {
+      const burger = document.querySelector(".nav-burger");
+      const links = document.querySelector(".nav-links");
+      burger.classList.toggle("active");
+      links.classList.toggle("active");
+    }
+    function closeMobileMenu() {
+      const burger = document.querySelector(".nav-burger");
+      const links = document.querySelector(".nav-links");
+      burger.classList.remove("active");
+      links.classList.remove("active");
+    }
+    document.addEventListener("click", (e) => {
+      const nav = document.querySelector("nav");
+      if (!nav.contains(e.target)) closeMobileMenu();
+    });
+  </script>
 
   <script src="cursor.js"></script>
 
