@@ -199,6 +199,22 @@
 
     .grid-item:hover .caption { opacity: 1; }
 
+    .grid-item .preview-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .grid-item:hover .preview-video {
+      opacity: 1;
+    }
+
     /* ────────────────────────────────
        ABOUT
     ──────────────────────────────── */
@@ -422,34 +438,33 @@
         item.className = 'grid-item';
         item.style.cursor = 'pointer';
 
-        const isVideo = projectManager.isVideo(project);
-        let media;
+        // Always show thumbnail image
+        const img = document.createElement('img');
+        img.dataset.thumb = project.thumbnail_path;
+        img.alt = project.title;
+        img.onerror = () => { img.src = 'Assets/favicon-32.png'; };
+        item.appendChild(img);
 
-        if (isVideo) {
-          media = document.createElement('video');
-          media.muted = true;
-          media.playsInline = true;
-          media.preload = 'none';
-          media.dataset.poster = project.thumbnail_path;
+        // Add hover preview video if available
+        const videos = projectManager.getVideoArray(project);
+        if (videos.length > 0) {
+          const previewVideo = document.createElement('video');
+          previewVideo.className = 'preview-video';
+          previewVideo.muted = true;
+          previewVideo.playsInline = true;
+          previewVideo.loop = true;
+          previewVideo.preload = 'none';
+          previewVideo.src = videos[0];
+          item.appendChild(previewVideo);
 
           item.addEventListener('mouseenter', () => {
-            media.src = project.video_link;
-            media.load();
-            media.play().catch(() => {});
+            previewVideo.play().catch(() => {});
           });
           item.addEventListener('mouseleave', () => {
-            media.pause();
-            media.removeAttribute('src');
-            media.load();
+            previewVideo.pause();
+            previewVideo.currentTime = 0;
           });
-        } else {
-          media = document.createElement('img');
-          media.dataset.thumb = project.thumbnail_path;
-          media.alt = project.title;
-          media.onerror = () => { media.src = 'Assets/favicon-32.png'; };
         }
-
-        item.appendChild(media);
 
         const tag = document.createElement('span');
         tag.className = 'tag';

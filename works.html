@@ -273,6 +273,68 @@
       display: block;
     }
 
+    .carousel-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .carousel-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding: 0 0.5rem;
+      gap: 1rem;
+    }
+
+    .carousel-counter {
+      font-size: 0.85rem;
+      color: var(--mid);
+      text-align: center;
+      flex: 1;
+    }
+
+    .carousel-btn {
+      background: none;
+      border: 1px solid #d8d4ce;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--ink);
+      transition: all 0.2s ease;
+      border-radius: 2px;
+    }
+
+    .carousel-btn:hover {
+      background: #f5f3f0;
+      border-color: var(--ink);
+    }
+
+    .carousel-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .grid-item {
+      position: relative;
+    }
+
+    .grid-item .preview-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .grid-item:hover .preview-video {
+      opacity: 1;
+    }
+
     .case-study-gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -522,22 +584,32 @@
         item.className = 'grid-item';
         item.style.cursor = 'pointer';
 
-        const isVideo = projectManager.isVideo(project);
-        let media;
+        // Always show thumbnail image
+        const img = document.createElement('img');
+        img.src = project.thumbnail_path;
+        img.alt = project.title;
+        img.onerror = () => { img.src = 'Assets/favicon-32.png'; };
+        item.appendChild(img);
 
-        if (isVideo) {
-          media = document.createElement('video');
-          media.muted = true;
-          media.preload = 'none';
-          media.poster = project.thumbnail_path;
-        } else {
-          media = document.createElement('img');
-          media.src = project.thumbnail_path;
-          media.alt = project.title;
-          media.onerror = () => { media.src = 'Assets/favicon-32.png'; };
+        // Add hover preview video if available
+        const videos = projectManager.getVideoArray(project);
+        if (videos.length > 0) {
+          const previewVideo = document.createElement('video');
+          previewVideo.className = 'preview-video';
+          previewVideo.muted = true;
+          previewVideo.loop = true;
+          previewVideo.preload = 'none';
+          previewVideo.src = videos[0];
+          item.appendChild(previewVideo);
+
+          item.addEventListener('mouseenter', () => {
+            previewVideo.play().catch(() => {});
+          });
+          item.addEventListener('mouseleave', () => {
+            previewVideo.pause();
+            previewVideo.currentTime = 0;
+          });
         }
-
-        item.appendChild(media);
 
         const tag = document.createElement('span');
         tag.className = 'tag';
@@ -554,19 +626,37 @@
       });
     }
 
+    let currentVideoIndex = 0;
+    let currentVideos = [];
+
     function showCaseStudy(project) {
       const modal = document.getElementById('caseStudyModal');
       const content = document.getElementById('caseStudyContent');
+
+      currentVideos = projectManager.getVideoArray(project);
+      currentVideoIndex = 0;
       const isVideo = projectManager.isVideo(project);
 
       // Default aspect ratio
       let aspectRatio = project.aspect_ratio || '16 / 9';
 
       let mediaHtml = '';
-      if (isVideo) {
-        mediaHtml = `<video id="caseStudyVideo" controls style="width: 100%; height: auto;"><source src="${project.video_link}" type="video/mp4"></video>`;
-      } else {
+      if (isVideo && currentVideos.length > 0) {
+        mediaHtml = `<video id="caseStudyVideo" controls style="width: 100%; height: auto;"><source src="${currentVideos[0]}" type="video/mp4"></video>`;
+      } else if (project.video_link) {
         mediaHtml = `<img src="${project.video_link}" style="width: 100%; height: auto;" onerror="this.src='Assets/favicon-32.png'">`;
+      }
+
+      // Carousel controls if multiple videos
+      let carouselHtml = '';
+      if (currentVideos.length > 1) {
+        carouselHtml = `
+          <div class="carousel-controls">
+            <button class="carousel-btn" id="prevBtn" onclick="previousVideo()">← Previous</button>
+            <div class="carousel-counter"><span id="videoCounter">1</span> / <span id="videoTotal">${currentVideos.length}</span></div>
+            <button class="carousel-btn" id="nextBtn" onclick="nextVideo()">Next →</button>
+          </div>
+        `;
       }
 
       // Gallery items - 5 placeholder spots for additional images/videos
@@ -582,7 +672,10 @@
 
       content.innerHTML = `
         <div class="case-study">
-          <div class="case-study-media" id="caseStudyMedia" style="--aspect-ratio: ${aspectRatio};">${mediaHtml}</div>
+          <div>
+            <div class="case-study-media" id="caseStudyMedia" style="--aspect-ratio: ${aspectRatio};">${mediaHtml}</div>
+            ${carouselHtml}
+          </div>
           <div class="case-study-info">
             <div class="case-study-header">
               <h1 class="case-study-title">${project.title}</h1>
@@ -624,7 +717,7 @@
       document.body.style.overflow = 'hidden';
 
       // Detect video dimensions and set aspect ratio
-      if (isVideo) {
+      if (isVideo && currentVideos.length > 0) {
         const video = document.getElementById('caseStudyVideo');
         const media = document.getElementById('caseStudyMedia');
 
@@ -635,13 +728,45 @@
           }
         };
 
-        // Try to get dimensions when metadata loads
         if (video.readyState >= 1) {
           setAspectRatio();
         } else {
           video.addEventListener('loadedmetadata', setAspectRatio, { once: true });
         }
       }
+
+      updateCarouselButtons();
+    }
+
+    function previousVideo() {
+      if (currentVideoIndex > 0) {
+        currentVideoIndex--;
+        updateVideo();
+      }
+    }
+
+    function nextVideo() {
+      if (currentVideoIndex < currentVideos.length - 1) {
+        currentVideoIndex++;
+        updateVideo();
+      }
+    }
+
+    function updateVideo() {
+      const video = document.getElementById('caseStudyVideo');
+      if (video && currentVideos[currentVideoIndex]) {
+        video.src = currentVideos[currentVideoIndex];
+        video.play().catch(() => {});
+        document.getElementById('videoCounter').textContent = currentVideoIndex + 1;
+        updateCarouselButtons();
+      }
+    }
+
+    function updateCarouselButtons() {
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      if (prevBtn) prevBtn.disabled = currentVideoIndex === 0;
+      if (nextBtn) nextBtn.disabled = currentVideoIndex === currentVideos.length - 1;
     }
 
     function closeCaseStudy() {

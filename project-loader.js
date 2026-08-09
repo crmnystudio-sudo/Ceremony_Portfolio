@@ -79,9 +79,21 @@ class ProjectManager {
   }
 
   isVideo(project) {
-    return project.video_link.toLowerCase().endsWith('.mp4') ||
-           project.video_link.toLowerCase().endsWith('.webm') ||
-           project.video_link.toLowerCase().endsWith('.mov');
+    const link = project.video_link || '';
+    return link.toLowerCase().endsWith('.mp4') ||
+           link.toLowerCase().endsWith('.webm') ||
+           link.toLowerCase().endsWith('.mov');
+  }
+
+  getVideoArray(project) {
+    const link = project.video_link || '';
+    if (!link) return [];
+    return link.split('|').map(v => v.trim()).filter(v => v);
+  }
+
+  getFirstVideo(project) {
+    const videos = this.getVideoArray(project);
+    return videos.length > 0 ? videos[0] : '';
   }
 }
 
