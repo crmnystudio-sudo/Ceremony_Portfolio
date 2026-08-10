@@ -147,31 +147,31 @@ class FallingWordsAnimation {
       if (p.y > bottom) {
         p.y = bottom;
         p.vy *= -this.bounce;
-
         p.landed = true;
-
-        // Push away to left or right depending on position
-        if (p.x < centerX) {
-          // On left side - push left
-          p.vx = -0.15;
-        } else {
-          // On right side - push right
-          p.vx = 0.15;
-        }
       }
 
-      // Soft boundaries with safe margins
-      const leftBound = p.width / 2 + 20;
-      const rightBound = this.canvas.width - p.width / 2 - 20;
+      // Smooth water flow - gentle push away from edges
+      const leftEdge = p.width / 2;
+      const rightEdge = this.canvas.width - p.width / 2;
+      const edgeBuffer = 40;
 
-      if (p.x < leftBound) {
-        p.x = leftBound;
-        p.vx *= -0.3;
+      // Left edge - gentle push right
+      if (p.x < leftEdge + edgeBuffer) {
+        const distFromEdge = p.x - leftEdge;
+        const pushForce = (1 - Math.max(0, distFromEdge) / edgeBuffer) * 0.02;
+        p.vx += pushForce;
       }
-      if (p.x > rightBound) {
-        p.x = rightBound;
-        p.vx *= -0.3;
+
+      // Right edge - gentle push left
+      if (p.x > rightEdge - edgeBuffer) {
+        const distFromEdge = rightEdge - p.x;
+        const pushForce = (1 - Math.max(0, distFromEdge) / edgeBuffer) * 0.02;
+        p.vx -= pushForce;
       }
+
+      // Clamp position to stay within bounds
+      if (p.x < leftEdge) p.x = leftEdge;
+      if (p.x > rightEdge) p.x = rightEdge;
 
       // Stop when at rest
       if (Math.abs(p.vy) < 0.05 && Math.abs(p.vx) < 0.05 && p.landed) {
