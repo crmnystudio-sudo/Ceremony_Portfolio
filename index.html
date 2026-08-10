@@ -156,8 +156,9 @@
 
   <div class="wave-divider"></div>
 
+  <script src="config.js"></script>
   <script>
-    const correctPassword = 'ceremony26';
+    const correctPassword = typeof PASSWORD !== 'undefined' ? PASSWORD : 'ceremony26';
 
     // Check if already authenticated
     function checkAuth() {
