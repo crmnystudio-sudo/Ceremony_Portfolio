@@ -47,19 +47,26 @@
 
     /* NAV */
     nav {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
       padding: 2.5rem 3rem 1rem;
       position: sticky;
       top: 0;
       z-index: 100;
       background: var(--cream);
-      gap: 1rem;
     }
 
-    .theme-toggle {
-      justify-self: center;
+    #themeToggle {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
     .nav-brand {
@@ -547,17 +554,19 @@
       <span class="nav-logo">ceremony.</span>
     </a>
     <button id="themeToggle" class="theme-toggle">🌙</button>
-    <button class="nav-burger" onclick="toggleMobileMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <ul class="nav-links">
-      <li><a href="home.html?t=1" onclick="closeMobileMenu()">home</a></li>
-      <li><a href="works.html?t=1" onclick="closeMobileMenu()">works</a></li>
-      <li><a href="about.html?t=1" onclick="closeMobileMenu()">about</a></li>
-      <li><a href="contact.html?t=1" onclick="closeMobileMenu()">contact</a></li>
-    </ul>
+    <div class="nav-right">
+      <button class="nav-burger" onclick="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="home.html?t=1" onclick="closeMobileMenu()">home</a></li>
+        <li><a href="works.html?t=1" onclick="closeMobileMenu()">works</a></li>
+        <li><a href="about.html?t=1" onclick="closeMobileMenu()">about</a></li>
+        <li><a href="contact.html?t=1" onclick="closeMobileMenu()">contact</a></li>
+      </ul>
+    </div>
   </nav>
 
   <div class="wave-divider"></div>
