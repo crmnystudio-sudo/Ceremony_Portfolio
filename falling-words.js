@@ -249,9 +249,21 @@ class FallingWordsAnimation {
         colorProgress = fadeProgress;
       }
 
-      // Transition from dark ink to light blue as it fades
-      const startR = 26, startG = 26, startB = 26;
-      const endR = 180, endG = 200, endB = 220;
+      // Check if dark mode is enabled
+      const isDarkMode = document.documentElement.classList.contains('dark-mode');
+
+      // Colors based on theme
+      let startR, startG, startB, endR, endG, endB;
+      if (isDarkMode) {
+        // Dark mode: white to light blue
+        startR = 255; startG = 255; startB = 255;
+        endR = 180; endG = 200; endB = 220;
+      } else {
+        // Light mode: dark to light blue
+        startR = 26; startG = 26; startB = 26;
+        endR = 180; endG = 200; endB = 220;
+      }
+
       const r = Math.round(startR + (endR - startR) * colorProgress);
       const g = Math.round(startG + (endG - startG) * colorProgress);
       const b = Math.round(startB + (endB - startB) * colorProgress);
