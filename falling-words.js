@@ -116,17 +116,16 @@ class FallingWordsAnimation {
   }
 
   checkBounds(p1, p2) {
-    const left1 = p1.x - p1.width / 2;
-    const right1 = p1.x + p1.width / 2;
-    const top1 = p1.y - p1.height / 2;
-    const bottom1 = p1.y + p1.height / 2;
+    // Circular collision detection - radius is average of width/height
+    const r1 = Math.max(p1.width, p1.height) / 2;
+    const r2 = Math.max(p2.width, p2.height) / 2;
+    const minDist = r1 + r2;
 
-    const left2 = p2.x - p2.width / 2;
-    const right2 = p2.x + p2.width / 2;
-    const top2 = p2.y - p2.height / 2;
-    const bottom2 = p2.y + p2.height / 2;
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
 
-    return !(right1 < left2 || right2 < left1 || bottom1 < top2 || bottom2 < top1);
+    return dist < minDist;
   }
 
   updatePhysics() {
@@ -180,7 +179,7 @@ class FallingWordsAnimation {
       }
     });
 
-    // Minimal collision separation - allow overlapping
+    // Minimal circular collision separation - allow overlapping
     for (let i = 0; i < this.particles.length; i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
         if (this.checkBounds(this.particles[i], this.particles[j])) {
@@ -190,19 +189,22 @@ class FallingWordsAnimation {
           const dx = p2.x - p1.x;
           const dy = p2.y - p1.y;
           const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-          const minDist = (p1.width + p2.width) / 2;
 
-          if (dist < minDist - 1) {
+          const r1 = Math.max(p1.width, p1.height) / 2;
+          const r2 = Math.max(p2.width, p2.height) / 2;
+          const minDist = r1 + r2;
+
+          if (dist < minDist) {
             const nx = dx / dist;
             const ny = dy / dist;
             const overlap = minDist - dist;
-            const moveX = (nx * overlap) / 8;
-            const moveY = (ny * overlap) / 8;
+            const moveX = nx * overlap * 0.05;
+            const moveY = ny * overlap * 0.05;
 
-            p1.x -= moveX * 0.2;
-            p1.y -= moveY * 0.2;
-            p2.x += moveX * 0.2;
-            p2.y += moveY * 0.2;
+            p1.x -= moveX;
+            p1.y -= moveY;
+            p2.x += moveX;
+            p2.y += moveY;
           }
         }
       }
