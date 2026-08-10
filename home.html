@@ -457,11 +457,16 @@
           previewVideo.muted = true;
           previewVideo.playsInline = true;
           previewVideo.loop = true;
-          previewVideo.preload = 'none';
-          previewVideo.src = videos[0];
+          previewVideo.preload = 'metadata';
+          previewVideo.crossOrigin = 'anonymous';
+          const source = document.createElement('source');
+          source.src = videos[0];
+          source.type = 'video/mp4';
+          previewVideo.appendChild(source);
           item.appendChild(previewVideo);
 
           item.addEventListener('mouseenter', () => {
+            previewVideo.currentTime = 0;
             previewVideo.play().catch(() => {});
           });
           item.addEventListener('mouseleave', () => {

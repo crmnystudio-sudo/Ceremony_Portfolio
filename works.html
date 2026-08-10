@@ -601,11 +601,16 @@
           previewVideo.className = 'preview-video';
           previewVideo.muted = true;
           previewVideo.loop = true;
-          previewVideo.preload = 'none';
-          previewVideo.src = videos[0];
+          previewVideo.preload = 'metadata';
+          previewVideo.crossOrigin = 'anonymous';
+          const source = document.createElement('source');
+          source.src = videos[0];
+          source.type = 'video/mp4';
+          previewVideo.appendChild(source);
           item.appendChild(previewVideo);
 
           item.addEventListener('mouseenter', () => {
+            previewVideo.currentTime = 0;
             previewVideo.play().catch(() => {});
           });
           item.addEventListener('mouseleave', () => {
@@ -747,8 +752,24 @@
 
     function updateVideo() {
       const video = document.getElementById('caseStudyVideo');
+      const media = document.getElementById('caseStudyMedia');
       if (video && currentVideos[currentVideoIndex]) {
         video.src = currentVideos[currentVideoIndex];
+        video.load();
+
+        // Update aspect ratio when video metadata loads
+        const updateAspectRatio = () => {
+          if (video.videoWidth && video.videoHeight) {
+            media.style.setProperty('--aspect-ratio', `${video.videoWidth} / ${video.videoHeight}`);
+          }
+        };
+
+        if (video.readyState >= 1) {
+          updateAspectRatio();
+        } else {
+          video.addEventListener('loadedmetadata', updateAspectRatio, { once: true });
+        }
+
         video.play().catch(() => {});
         document.getElementById('videoCounter').textContent = currentVideoIndex + 1;
         updateCarouselButtons();
