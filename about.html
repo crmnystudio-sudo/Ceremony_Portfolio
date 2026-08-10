@@ -216,25 +216,19 @@
     }
 
     /* ────────────────────────────────
-       SERVICES & CLIENTS
+       SECTIONS
     ──────────────────────────────── */
-    #services-clients {
+    #services, #clients, #tools {
       padding: 3rem 5rem 3.5rem;
     }
 
-    .services-clients-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 5rem;
-    }
-
-    .services-column, .clients-column, .tools-column {
+    .section-inner {
       display: flex;
       flex-direction: column;
     }
 
-    .tools-column {
-      justify-self: end;
+    #tools .section-inner {
+      align-items: flex-end;
       text-align: right;
     }
 
@@ -321,20 +315,8 @@
       break-inside: avoid;
     }
 
-    @media (max-width: 1400px) {
-      .services-clients-inner { gap: 4rem; }
-    }
-
-    @media (max-width: 1024px) {
-      .services-clients-inner { grid-template-columns: 1fr 1fr; gap: 3rem; }
-    }
-
-    @media (max-width: 768px) {
-      .services-clients-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-    }
-
     @media (max-width: 640px) {
-      #services-clients { padding: 2.5rem 1.5rem 3rem; }
+      #services, #clients, #tools { padding: 2.5rem 1.5rem 3rem; }
     }
 
     /* ────────────────────────────────
@@ -552,56 +534,66 @@
 
   <div class="wave-divider"></div>
 
-  <!-- SERVICES & CLIENTS -->
-  <section id="services-clients">
-    <div class="services-clients-inner">
-      <div class="services-column">
-        <p class="section-meta">Services & Expertise</p>
-        <div class="services-list" id="servicesList"></div>
-      </div>
-      <div class="clients-column">
-        <p class="section-meta">Selected Clients</p>
-        <div class="client-groups">
-          <div class="client-group">
-            <h3>Brand &amp; Creative</h3>
-            <ul>
-              <li>DFA</li>
-              <li>Galeria</li>
-              <li>Young Henries</li>
-              <li>Cameron Studio</li>
-              <li>Spur</li>
-              <li>Teal Dee</li>
-            </ul>
-          </div>
+  <!-- SERVICES & EXPERTISE -->
+  <section id="services">
+    <div class="section-inner">
+      <p class="section-meta">Services & Expertise</p>
+      <div class="services-list" id="servicesList"></div>
+    </div>
+  </section>
 
-          <div class="client-group">
-            <h3>Industry &amp; Technology</h3>
-            <ul>
-              <li>Orica</li>
-              <li>Bradken</li>
-              <li>NSW Health</li>
-              <li>Transport for NSW</li>
-              <li>MGA Thermal</li>
-              <li>Youth Express</li>
-              <li>RME</li>
-              <li>John Holland</li>
-              <li>SiNAB</li>
-              <li>Sandvik</li>
-              <li>Pitcrew AI</li>
-              <li>NAMIR</li>
-              <li>AGL</li>
-              <li>Banlaw</li>
-              <li>EGA</li>
-              <li>FleetSafe</li>
-              <li>IAC</li>
-            </ul>
-          </div>
+  <div class="wave-divider"></div>
+
+  <!-- SELECTED CLIENTS -->
+  <section id="clients">
+    <div class="section-inner">
+      <p class="section-meta">Selected Clients</p>
+      <div class="client-groups">
+        <div class="client-group">
+          <h3>Brand &amp; Creative</h3>
+          <ul>
+            <li>DFA</li>
+            <li>Galeria</li>
+            <li>Young Henries</li>
+            <li>Cameron Studio</li>
+            <li>Spur</li>
+            <li>Teal Dee</li>
+          </ul>
+        </div>
+
+        <div class="client-group">
+          <h3>Industry &amp; Technology</h3>
+          <ul>
+            <li>Orica</li>
+            <li>Bradken</li>
+            <li>NSW Health</li>
+            <li>Transport for NSW</li>
+            <li>MGA Thermal</li>
+            <li>Youth Express</li>
+            <li>RME</li>
+            <li>John Holland</li>
+            <li>SiNAB</li>
+            <li>Sandvik</li>
+            <li>Pitcrew AI</li>
+            <li>NAMIR</li>
+            <li>AGL</li>
+            <li>Banlaw</li>
+            <li>EGA</li>
+            <li>FleetSafe</li>
+            <li>IAC</li>
+          </ul>
         </div>
       </div>
-      <div class="tools-column">
-        <p class="section-meta">Tools & Programs</p>
-        <div class="tools-list" id="toolsList"></div>
-      </div>
+    </div>
+  </section>
+
+  <div class="wave-divider"></div>
+
+  <!-- TOOLS & PROGRAMS -->
+  <section id="tools">
+    <div class="section-inner">
+      <p class="section-meta">Tools & Programs</p>
+      <div class="tools-list" id="toolsList"></div>
     </div>
   </section>
 
