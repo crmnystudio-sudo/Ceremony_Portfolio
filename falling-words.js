@@ -180,7 +180,7 @@ class FallingWordsAnimation {
       }
     });
 
-    // Simple collision separation
+    // Minimal collision separation - allow overlapping
     for (let i = 0; i < this.particles.length; i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
         if (this.checkBounds(this.particles[i], this.particles[j])) {
@@ -196,13 +196,13 @@ class FallingWordsAnimation {
             const nx = dx / dist;
             const ny = dy / dist;
             const overlap = minDist - dist;
-            const moveX = (nx * overlap) / 3;
-            const moveY = (ny * overlap) / 3;
+            const moveX = (nx * overlap) / 8;
+            const moveY = (ny * overlap) / 8;
 
-            p1.x -= moveX * 0.5;
-            p1.y -= moveY * 0.5;
-            p2.x += moveX * 0.5;
-            p2.y += moveY * 0.5;
+            p1.x -= moveX * 0.2;
+            p1.y -= moveY * 0.2;
+            p2.x += moveX * 0.2;
+            p2.y += moveY * 0.2;
           }
         }
       }
