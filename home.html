@@ -464,6 +464,7 @@
           previewVideo.loop = true;
           previewVideo.preload = 'metadata';
           previewVideo.crossOrigin = 'anonymous';
+          previewVideo.controlsList = 'nodownload';
           const source = document.createElement('source');
           source.src = videos[0];
           source.type = 'video/mp4';

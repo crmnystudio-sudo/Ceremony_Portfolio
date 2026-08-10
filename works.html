@@ -603,6 +603,7 @@
           previewVideo.loop = true;
           previewVideo.preload = 'metadata';
           previewVideo.crossOrigin = 'anonymous';
+          previewVideo.controlsList = 'nodownload';
           const source = document.createElement('source');
           source.src = videos[0];
           source.type = 'video/mp4';
@@ -654,7 +655,7 @@
 
       let mediaHtml = '';
       if (isVideo && currentVideos.length > 0) {
-        mediaHtml = `<video id="caseStudyVideo" controls preload="metadata" crossorigin="anonymous" style="width: 100%; height: 100%;"><source src="${currentVideos[0]}" type="video/mp4">Your browser does not support the video tag.</video>`;
+        mediaHtml = `<video id="caseStudyVideo" controls muted controlsList="nodownload" preload="metadata" crossorigin="anonymous" style="width: 100%; height: 100%;"><source src="${currentVideos[0]}" type="video/mp4">Your browser does not support the video tag.</video>`;
       } else if (project.video_link) {
         mediaHtml = `<img src="${project.video_link}" style="width: 100%; height: auto;" onerror="this.src='Assets/favicon-32.png'">`;
       }
