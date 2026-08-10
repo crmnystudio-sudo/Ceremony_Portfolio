@@ -16,7 +16,7 @@ class FallingWordsAnimation {
     this.spawnInterval = 1500;
     this.lastSpawnTime = 0;
     this.animationStartTime = 0;
-    this.wordLifetime = 20000; // 20 seconds lifetime per word before fade
+    this.wordLifetime = 30000; // 30 seconds lifetime per word before fade
 
     this.fontSize = 16;
     this.fontFamily = 'bold 16px Palatino Linotype, serif';
