@@ -119,4 +119,9 @@ footer span {
   align-items: center;
   justify-content: center;
   color: var(--ink);
+  transition: opacity 0.2s ease;
+}
+
+#themeToggle:hover {
+  opacity: 0.35;
 }
