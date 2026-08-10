@@ -156,17 +156,17 @@ class FallingWordsAnimation {
         }
       }
 
-      // Soft boundaries
-      const leftBound = 30;
-      const rightBound = this.canvas.width - 30;
+      // Soft boundaries with safe margins
+      const leftBound = p.width / 2 + 20;
+      const rightBound = this.canvas.width - p.width / 2 - 20;
 
       if (p.x < leftBound) {
         p.x = leftBound;
-        p.vx *= -0.4;
+        p.vx *= -0.3;
       }
       if (p.x > rightBound) {
         p.x = rightBound;
-        p.vx *= -0.4;
+        p.vx *= -0.3;
       }
 
       // Stop when at rest
@@ -176,7 +176,7 @@ class FallingWordsAnimation {
       }
     });
 
-    // Collision detection - improved for better stacking
+    // Simple collision separation - just push apart
     for (let i = 0; i < this.particles.length; i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
         if (this.checkBounds(this.particles[i], this.particles[j])) {
@@ -186,30 +186,20 @@ class FallingWordsAnimation {
           const dx = p2.x - p1.x;
           const dy = p2.y - p1.y;
           const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          const minDist = (p1.width + p2.width) / 2 + 2;
 
-          const nx = dx / dist;
-          const ny = dy / dist;
+          if (dist < minDist) {
+            const nx = dx / dist;
+            const ny = dy / dist;
+            const overlap = minDist - dist;
+            const moveX = (nx * overlap) / 2;
+            const moveY = (ny * overlap) / 2;
 
-          const dvx = p2.vx - p1.vx;
-          const dvy = p2.vy - p1.vy;
-          const dvDot = dvx * nx + dvy * ny;
-
-          if (dvDot > 0) continue;
-
-          const impulse = dvDot / 4.0;
-          p1.vx += impulse * nx * 0.3;
-          p1.vy += impulse * ny * 0.3;
-          p2.vx -= impulse * nx * 0.3;
-          p2.vy -= impulse * ny * 0.3;
-
-          const minDist = (p1.width + p2.width) / 2;
-          const overlap = minDist - dist;
-          const moveX = (nx * overlap) / 2 + 0.05;
-          const moveY = (ny * overlap) / 2 + 0.05;
-          p1.x -= moveX;
-          p1.y -= moveY;
-          p2.x += moveX;
-          p2.y += moveY;
+            p1.x -= moveX;
+            p1.y -= moveY;
+            p2.x += moveX;
+            p2.y += moveY;
+          }
         }
       }
     }
