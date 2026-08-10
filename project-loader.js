@@ -65,7 +65,7 @@ class ProjectManager {
   getFeatured() {
     return this.projects
       .filter(p => p.included === 'Y' && p.featured === 'Y')
-      .sort((a, b) => parseInt(a.sort_order) - parseInt(b.sort_order));
+      .sort((a, b) => parseInt(a.featured_sort_order) - parseInt(b.featured_sort_order));
   }
 
   getAll() {
