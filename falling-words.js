@@ -10,8 +10,8 @@ class FallingWordsAnimation {
     this.wordIndex = 0;
 
     this.gravity = 0.15;
-    this.friction = 0.98;
-    this.bounce = 0.2;
+    this.friction = 0.85;
+    this.bounce = 0.05;
     this.spawnInterval = 800;
     this.lastSpawnTime = 0;
     this.animationStartTime = 0;
@@ -188,11 +188,11 @@ class FallingWordsAnimation {
 
           if (dvDot > 0) continue;
 
-          const impulse = dvDot / 2.2;
-          p1.vx += impulse * nx;
-          p1.vy += impulse * ny;
-          p2.vx -= impulse * nx;
-          p2.vy -= impulse * ny;
+          const impulse = dvDot / 4.0;
+          p1.vx += impulse * nx * 0.3;
+          p1.vy += impulse * ny * 0.3;
+          p2.vx -= impulse * nx * 0.3;
+          p2.vy -= impulse * ny * 0.3;
 
           const minDist = (p1.width + p2.width) / 2;
           const overlap = minDist - dist;
