@@ -19,7 +19,7 @@ class FallingWordsAnimation {
     this.wordLifetime = 30000; // 30 seconds lifetime per word before fade
 
     this.fontSize = 16;
-    this.fontFamily = 'bold 16px Palatino Linotype, serif';
+    this.fontFamily = '16px Palatino Linotype, serif';
 
     this.resizeCanvas();
     window.addEventListener('resize', () => this.resizeCanvas());
