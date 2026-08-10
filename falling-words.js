@@ -136,7 +136,30 @@ class FallingWordsAnimation {
       if (p.y > bottom) {
         p.y = bottom;
         p.vy *= -this.bounce;
+
+        if (!p.landed) {
+          p.landTime = Date.now();
+        }
         p.landed = true;
+      }
+
+      // Natural water movement after landing
+      if (p.landed) {
+        const timeSinceLanding = Date.now() - (p.landTime || Date.now());
+
+        // Gentle bobbing motion - subtle vertical oscillation
+        const bobAmount = Math.sin(timeSinceLanding * 0.003) * 0.5;
+        p.y += bobAmount * 0.1;
+
+        // Gradual horizontal drift based on position (like floating currents)
+        if (p.x < centerX) {
+          p.vx += -0.005; // Gentle leftward push
+        } else {
+          p.vx += 0.005; // Gentle rightward push
+        }
+
+        // Add tiny random drift (water currents)
+        p.vx += (Math.random() - 0.5) * 0.002;
       }
 
       // Smooth water flow - gentle push away from edges
