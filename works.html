@@ -659,16 +659,8 @@
         `;
       }
 
-      // Gallery items - 5 placeholder spots for additional images/videos
-      let galleryHtml = '<div class="case-study-gallery">';
-      for (let i = 0; i < 5; i++) {
-        galleryHtml += `
-          <div class="gallery-item" title="Gallery image ${i + 1}">
-            <div class="gallery-placeholder">+</div>
-          </div>
-        `;
-      }
-      galleryHtml += '</div>';
+      // Gallery section removed for now
+      let galleryHtml = '';
 
       content.innerHTML = `
         <div class="case-study">
@@ -707,8 +699,6 @@
               <div class="case-study-label">About this project</div>
               <div class="case-study-description">${project.description}</div>
             </div>
-
-            ${galleryHtml}
           </div>
         </div>
       `;
