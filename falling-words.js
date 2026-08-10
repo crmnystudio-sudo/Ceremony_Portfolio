@@ -162,11 +162,13 @@ class FallingWordsAnimation {
 
         p.landed = true;
 
-        // Very gentle push toward center to form hill
-        const distFromCenter = Math.abs(p.x - centerX);
-        if (distFromCenter > 30) {
-          const pushDir = p.x > centerX ? -1 : 1;
-          p.vx += pushDir * 0.01;
+        // Push away to left or right depending on position
+        if (p.x < centerX) {
+          // On left side - push left
+          p.vx = -0.15;
+        } else {
+          // On right side - push right
+          p.vx = 0.15;
         }
       }
 
