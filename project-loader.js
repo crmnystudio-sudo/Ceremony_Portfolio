@@ -63,11 +63,15 @@ class ProjectManager {
   }
 
   getFeatured() {
-    return this.projects.filter(p => p.included === 'Y' && p.featured === 'Y');
+    return this.projects
+      .filter(p => p.included === 'Y' && p.featured === 'Y')
+      .sort((a, b) => parseInt(a.sort_order) - parseInt(b.sort_order));
   }
 
   getAll() {
-    return this.projects.filter(p => p.included === 'Y');
+    return this.projects
+      .filter(p => p.included === 'Y')
+      .sort((a, b) => parseInt(a.sort_order) - parseInt(b.sort_order));
   }
 
   getByTitle(title) {
