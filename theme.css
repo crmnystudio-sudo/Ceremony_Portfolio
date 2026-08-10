@@ -104,9 +104,8 @@ footer span {
   align-items: center;
   justify-content: center;
   color: var(--ink);
-  transition: transform 0.3s ease;
 }
 
 #themeToggle:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
