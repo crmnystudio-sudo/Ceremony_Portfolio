@@ -76,7 +76,7 @@ class FallingWordsAnimation {
     const dims = this.measureText(word);
     const centerX = this.canvas.width / 2;
     const x = centerX + (Math.random() - 0.5) * 80;
-    const y = -dims.height;
+    const y = -this.canvas.height - 200; // Start falling from well above the header
     const vx = (Math.random() - 0.5) * 0.2;
     const vy = 0;
     const rotation = 0;
