@@ -1,5 +1,5 @@
 {
-  "buildCommand": "git lfs pull",
+  "buildCommand": "bash build.sh",
   "outputDirectory": ".",
   "env": {}
 }
