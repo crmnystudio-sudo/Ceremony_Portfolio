@@ -217,14 +217,23 @@ class FallingWordsAnimation {
       const age = now - p.spawnTime;
       const fadeStartTime = this.wordLifetime * 0.6; // Start fading at 60% of lifetime
       let opacity = 1;
+      let colorProgress = 0;
 
       if (age > fadeStartTime) {
         const fadeTime = this.wordLifetime - fadeStartTime;
         const fadeProgress = (age - fadeStartTime) / fadeTime;
         opacity = Math.max(0, 1 - fadeProgress);
+        colorProgress = fadeProgress;
       }
 
-      this.ctx.fillStyle = `rgba(26, 26, 26, ${opacity})`;
+      // Transition from dark ink to light blue as it fades
+      const startR = 26, startG = 26, startB = 26;
+      const endR = 180, endG = 200, endB = 220;
+      const r = Math.round(startR + (endR - startR) * colorProgress);
+      const g = Math.round(startG + (endG - startG) * colorProgress);
+      const b = Math.round(startB + (endB - startB) * colorProgress);
+
+      this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
 
       if (Math.abs(p.rotation) > 0.001) {
         // Save context, translate, rotate, draw, restore
