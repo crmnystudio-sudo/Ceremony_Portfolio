@@ -186,9 +186,9 @@ class FallingWordsAnimation {
           const dx = p2.x - p1.x;
           const dy = p2.y - p1.y;
           const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-          const minDist = (p1.width + p2.width) / 2 + 2;
+          const minDist = (p1.width + p2.width) / 2;
 
-          if (dist < minDist) {
+          if (dist < minDist - 1) {
             const nx = dx / dist;
             const ny = dy / dist;
             const overlap = minDist - dist;
