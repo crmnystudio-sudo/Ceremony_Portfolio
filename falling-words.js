@@ -5,16 +5,18 @@ class FallingWordsAnimation {
     if (!this.canvas) return;
 
     this.ctx = this.canvas.getContext('2d');
-    this.words = [];
     this.particles = [];
     this.wordList = [];
     this.wordIndex = 0;
 
-    this.gravity = 0.3;
-    this.friction = 0.98;
-    this.bounce = 0.4;
-    this.minSpawnInterval = 800; // ms between word spawns
+    this.gravity = 0.15;
+    this.friction = 0.99;
+    this.bounce = 0.3;
+    this.spawnInterval = 1000;
     this.lastSpawnTime = 0;
+
+    this.fontSize = 16;
+    this.fontFamily = 'bold 16px Palatino Linotype, serif';
 
     this.resizeCanvas();
     window.addEventListener('resize', () => this.resizeCanvas());
@@ -32,11 +34,7 @@ class FallingWordsAnimation {
       const response = await fetch('data/words.csv?t=' + Date.now());
       const csv = await response.text();
       const lines = csv.trim().split('\n');
-
-      // Skip header, get all words
-      this.wordList = lines.slice(1)
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
+      this.wordList = lines.slice(1).map(l => l.trim()).filter(l => l.length > 0);
 
       if (this.wordList.length > 0) {
         this.animate();
@@ -53,17 +51,27 @@ class FallingWordsAnimation {
     return word;
   }
 
+  measureText(text) {
+    this.ctx.font = this.fontFamily;
+    const metrics = this.ctx.measureText(text);
+    return {
+      width: metrics.width + 12,
+      height: this.fontSize + 8
+    };
+  }
+
   spawnWord() {
     const now = Date.now();
-    if (now - this.lastSpawnTime < this.minSpawnInterval) return;
+    if (now - this.lastSpawnTime < this.spawnInterval) return;
     this.lastSpawnTime = now;
 
     const word = this.getRandomWord();
     if (!word) return;
 
-    const x = this.canvas.width / 2 + (Math.random() - 0.5) * 100;
-    const y = -30;
-    const vx = (Math.random() - 0.5) * 2;
+    const dims = this.measureText(word);
+    const x = this.canvas.width / 2 + (Math.random() - 0.5) * 80;
+    const y = -dims.height;
+    const vx = (Math.random() - 0.5) * 1;
     const vy = 0;
 
     this.particles.push({
@@ -72,118 +80,119 @@ class FallingWordsAnimation {
       y,
       vx,
       vy,
-      width: 0,
-      height: 20,
+      ...dims,
       landed: false
     });
   }
 
-  updatePhysics() {
-    this.particles.forEach((p, i) => {
-      // Apply gravity
-      p.vy += this.gravity;
+  checkBounds(p1, p2) {
+    const left1 = p1.x - p1.width / 2;
+    const right1 = p1.x + p1.width / 2;
+    const top1 = p1.y - p1.height / 2;
+    const bottom1 = p1.y + p1.height / 2;
 
-      // Apply velocity
+    const left2 = p2.x - p2.width / 2;
+    const right2 = p2.x + p2.width / 2;
+    const top2 = p2.y - p2.height / 2;
+    const bottom2 = p2.y + p2.height / 2;
+
+    return !(right1 < left2 || right2 < left1 || bottom1 < top2 || bottom2 < top1);
+  }
+
+  updatePhysics() {
+    this.particles.forEach(p => {
+      p.vy += this.gravity;
       p.x += p.vx;
       p.y += p.vy;
-
-      // Friction in air
       p.vx *= this.friction;
 
-      // Bounce off floor
-      if (p.y + p.height > this.canvas.height - 10) {
-        p.y = this.canvas.height - 10 - p.height;
+      const bottom = this.canvas.height - p.height / 2;
+      if (p.y > bottom) {
+        p.y = bottom;
         p.vy *= -this.bounce;
         p.landed = true;
       }
 
-      // Bounce off walls
-      if (p.x < 0) {
-        p.x = 0;
-        p.vx *= -0.5;
+      if (p.x - p.width / 2 < 0) {
+        p.x = p.width / 2;
+        p.vx *= -0.6;
       }
-      if (p.x + p.width > this.canvas.width) {
-        p.x = this.canvas.width - p.width;
-        p.vx *= -0.5;
+      if (p.x + p.width / 2 > this.canvas.width) {
+        p.x = this.canvas.width - p.width / 2;
+        p.vx *= -0.6;
       }
 
-      // Stop moving when almost at rest
-      if (Math.abs(p.vy) < 0.1 && p.landed) {
+      if (Math.abs(p.vy) < 0.05 && p.landed) {
         p.vy = 0;
       }
     });
 
-    // Simple collision detection between particles
+    // Collision detection
     for (let i = 0; i < this.particles.length; i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
-        const p1 = this.particles[i];
-        const p2 = this.particles[j];
+        if (this.checkBounds(this.particles[i], this.particles[j])) {
+          const p1 = this.particles[i];
+          const p2 = this.particles[j];
 
-        const dx = p2.x - p1.x;
-        const dy = p2.y - p1.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const minDist = p1.width + p2.width;
+          const dx = p2.x - p1.x;
+          const dy = p2.y - p1.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
 
-        if (dist < minDist) {
-          // Simple collision response
-          const angle = Math.atan2(dy, dx);
-          const sin = Math.sin(angle);
-          const cos = Math.cos(angle);
+          const nx = dx / dist;
+          const ny = dy / dist;
 
-          // Separate particles
-          const overlap = minDist - dist + 2;
-          p1.x -= overlap * cos * 0.5;
-          p1.y -= overlap * sin * 0.5;
-          p2.x += overlap * cos * 0.5;
-          p2.y += overlap * sin * 0.5;
+          const dvx = p2.vx - p1.vx;
+          const dvy = p2.vy - p1.vy;
+          const dvDot = dvx * nx + dvy * ny;
 
-          // Exchange velocities
-          const vx1 = p1.vx * cos + p1.vy * sin;
-          const vy1 = p1.vy * cos - p1.vx * sin;
-          const vx2 = p2.vx * cos + p2.vy * sin;
-          const vy2 = p2.vy * cos - p2.vx * sin;
+          if (dvDot > 0) continue;
 
-          p1.vx = vx2 * cos - vy1 * sin;
-          p1.vy = vy1 * cos + vx2 * sin;
-          p2.vx = vx1 * cos - vy2 * sin;
-          p2.vy = vy2 * cos + vx1 * sin;
+          const impulse = dvDot / 2;
+          p1.vx += impulse * nx;
+          p1.vy += impulse * ny;
+          p2.vx -= impulse * nx;
+          p2.vy -= impulse * ny;
+
+          const overlap = (p1.width + p2.width) / 2 - dist;
+          const moveX = (nx * overlap) / 2 + 0.1;
+          const moveY = (ny * overlap) / 2 + 0.1;
+          p1.x -= moveX;
+          p1.y -= moveY;
+          p2.x += moveX;
+          p2.y += moveY;
         }
       }
     }
   }
 
   draw() {
-    // Clear canvas
-    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    // Clear canvas completely
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // Draw particles
-    this.ctx.font = 'bold 14px Palatino Linotype, serif';
+    this.ctx.font = this.fontFamily;
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
-    this.ctx.fillStyle = '#1a1a1a';
 
     this.particles.forEach(p => {
-      // Measure text width
-      const metrics = this.ctx.measureText(p.word);
-      p.width = metrics.width + 8;
-
-      // Draw background
-      this.ctx.fillStyle = 'rgba(216, 212, 206, 0.8)';
-      this.ctx.fillRect(
+      // Draw background pill
+      this.ctx.fillStyle = 'rgba(216, 212, 206, 0.9)';
+      this.ctx.beginPath();
+      this.ctx.roundRect(
         p.x - p.width / 2,
         p.y - p.height / 2,
         p.width,
-        p.height
+        p.height,
+        4
       );
+      this.ctx.fill();
 
       // Draw text
       this.ctx.fillStyle = '#1a1a1a';
       this.ctx.fillText(p.word, p.x, p.y);
     });
 
-    // Cleanup old particles that have fallen too far
-    this.particles = this.particles.filter(p => p.y < this.canvas.height + 100);
+    // Remove off-screen particles
+    this.particles = this.particles.filter(p => p.y < this.canvas.height + 50);
   }
 
   animate = () => {
@@ -194,7 +203,7 @@ class FallingWordsAnimation {
   }
 }
 
-// Initialize on page load
+// Initialize
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     new FallingWordsAnimation('falling-words-canvas');
