@@ -1,5 +1,4 @@
 {
-  "buildCommand": "node scripts/fetch-lfs.mjs",
-  "outputDirectory": ".",
-  "env": {}
+  "buildCommand": "echo 'Static site'",
+  "outputDirectory": "."
 }
