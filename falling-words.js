@@ -192,7 +192,7 @@ class FallingWordsAnimation {
       }
     });
 
-    // Simple collision separation - just push apart
+    // Liquid collision response - more splashy
     for (let i = 0; i < this.particles.length; i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
         if (this.checkBounds(this.particles[i], this.particles[j])) {
@@ -208,13 +208,29 @@ class FallingWordsAnimation {
             const nx = dx / dist;
             const ny = dy / dist;
             const overlap = minDist - dist;
-            const moveX = (nx * overlap) / 3;
-            const moveY = (ny * overlap) / 3;
+            const moveX = (nx * overlap) / 2.5;
+            const moveY = (ny * overlap) / 2.5;
 
-            p1.x -= moveX * 0.5;
-            p1.y -= moveY * 0.5;
-            p2.x += moveX * 0.5;
-            p2.y += moveY * 0.5;
+            p1.x -= moveX * 0.7;
+            p1.y -= moveY * 0.7;
+            p2.x += moveX * 0.7;
+            p2.y += moveY * 0.7;
+
+            // Add liquid splash - upward burst
+            p1.vy -= 0.08;
+            p2.vy -= 0.08;
+
+            // Create ripple on collision
+            if (p1.landed && p2.landed) {
+              this.ripples.push({
+                x: (p1.x + p2.x) / 2,
+                y: (p1.y + p2.y) / 2,
+                radius: 0,
+                maxRadius: 50,
+                life: 0.8,
+                decay: 0.02
+              });
+            }
           }
         }
       }
