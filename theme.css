@@ -23,7 +23,6 @@ body {
 
 nav {
   background: var(--cream);
-  border-bottom: 1px solid var(--border);
 }
 
 .nav-links a {
