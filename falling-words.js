@@ -9,10 +9,10 @@ class FallingWordsAnimation {
     this.wordList = [];
     this.wordIndex = 0;
 
-    this.gravity = 0.15;
-    this.friction = 0.85;
-    this.bounce = 0.05;
-    this.spawnInterval = 800;
+    this.gravity = 0.06;
+    this.friction = 0.90;
+    this.bounce = 0.02;
+    this.spawnInterval = 1000;
     this.lastSpawnTime = 0;
     this.animationStartTime = 0;
     this.spawnDuration = 15000; // 15 seconds
@@ -88,8 +88,10 @@ class FallingWordsAnimation {
     const centerX = this.canvas.width / 2;
     const x = centerX + (Math.random() - 0.5) * 120;
     const y = -dims.height;
-    const vx = (Math.random() - 0.5) * 0.8;
+    const vx = (Math.random() - 0.5) * 0.5;
     const vy = 0;
+    const rotation = 0;
+    const rotationVelocity = (Math.random() - 0.5) * 0.03;
 
     this.particles.push({
       word,
@@ -97,6 +99,8 @@ class FallingWordsAnimation {
       y,
       vx,
       vy,
+      rotation,
+      rotationVelocity,
       ...dims,
       landed: false
     });
@@ -133,6 +137,10 @@ class FallingWordsAnimation {
       p.x += p.vx;
       p.y += p.vy;
       p.vx *= this.friction;
+      p.rotation += p.rotationVelocity;
+      if (p.landed) {
+        p.rotationVelocity *= 0.97;
+      }
 
       const bottom = this.canvas.height - p.height / 2 - 10;
       if (p.y > bottom) {
@@ -217,7 +225,16 @@ class FallingWordsAnimation {
     this.ctx.fillStyle = '#1a1a1a';
 
     this.particles.forEach(p => {
-      this.ctx.fillText(p.word, p.x, p.y);
+      if (Math.abs(p.rotation) > 0.001) {
+        // Save context, translate, rotate, draw, restore
+        this.ctx.save();
+        this.ctx.translate(p.x, p.y);
+        this.ctx.rotate(p.rotation);
+        this.ctx.fillText(p.word, 0, 0);
+        this.ctx.restore();
+      } else {
+        this.ctx.fillText(p.word, p.x, p.y);
+      }
     });
 
     // Remove off-screen particles
