@@ -143,7 +143,7 @@ class FallingWordsAnimation {
         p.rotationVelocity *= 0.99;
       }
 
-      const bottom = this.canvas.height - 30;
+      const bottom = this.canvas.height - p.height - 20;
       if (p.y > bottom) {
         p.y = bottom;
         p.vy *= -this.bounce;
