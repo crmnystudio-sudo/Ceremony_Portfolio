@@ -6,6 +6,7 @@ class FallingWordsAnimation {
 
     this.ctx = this.canvas.getContext('2d');
     this.particles = [];
+    this.ripples = [];
     this.wordList = [];
     this.wordIndex = 0;
 
@@ -146,6 +147,19 @@ class FallingWordsAnimation {
       if (p.y > bottom) {
         p.y = bottom;
         p.vy *= -this.bounce;
+
+        // Create ripple on first landing
+        if (!p.landed) {
+          this.ripples.push({
+            x: p.x,
+            y: p.y,
+            radius: 0,
+            maxRadius: 60,
+            life: 1.0,
+            decay: 0.04
+          });
+        }
+
         p.landed = true;
 
         // Gentle push toward center to form hill
@@ -209,6 +223,25 @@ class FallingWordsAnimation {
     // Clear canvas completely
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    // Draw ripples (water effect)
+    this.ripples.forEach((ripple, idx) => {
+      ripple.radius += 2;
+      ripple.life -= ripple.decay;
+
+      if (ripple.life > 0 && ripple.radius < ripple.maxRadius) {
+        const alpha = ripple.life * 0.4;
+        this.ctx.strokeStyle = `rgba(26, 26, 26, ${alpha})`;
+        this.ctx.lineWidth = 1.5;
+        this.ctx.beginPath();
+        this.ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+        this.ctx.stroke();
+      }
+    });
+
+    // Remove dead ripples
+    this.ripples = this.ripples.filter(r => r.life > 0 && r.radius < r.maxRadius);
+
+    // Draw words
     this.ctx.font = this.fontFamily;
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
