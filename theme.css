@@ -94,6 +94,24 @@ footer span {
 }
 
 /* Theme toggle button */
+/* Images and icons in dark mode */
+:root.dark-mode .nav-gif {
+  filter: invert(1) brightness(1.1);
+}
+
+:root.dark-mode .page-icon {
+  filter: invert(1) brightness(1.1);
+}
+
+:root.dark-mode .about-image img {
+  filter: invert(0.95) brightness(1.05);
+}
+
+:root.dark-mode .contact-icon {
+  stroke: var(--ink);
+  color: var(--ink);
+}
+
 #themeToggle {
   background: none;
   border: none;
