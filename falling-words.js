@@ -148,18 +148,6 @@ class FallingWordsAnimation {
         p.y = bottom;
         p.vy *= -this.bounce;
 
-        // Create ripple on first landing
-        if (!p.landed) {
-          this.ripples.push({
-            x: p.x,
-            y: p.y,
-            radius: 0,
-            maxRadius: 80,
-            life: 1.0,
-            decay: 0.015
-          });
-        }
-
         p.landed = true;
 
         // Push away to left or right depending on position
@@ -192,7 +180,7 @@ class FallingWordsAnimation {
       }
     });
 
-    // Liquid collision response - more splashy
+    // Simple collision separation
     for (let i = 0; i < this.particles.length; i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
         if (this.checkBounds(this.particles[i], this.particles[j])) {
@@ -208,29 +196,13 @@ class FallingWordsAnimation {
             const nx = dx / dist;
             const ny = dy / dist;
             const overlap = minDist - dist;
-            const moveX = (nx * overlap) / 2.5;
-            const moveY = (ny * overlap) / 2.5;
+            const moveX = (nx * overlap) / 3;
+            const moveY = (ny * overlap) / 3;
 
-            p1.x -= moveX * 0.7;
-            p1.y -= moveY * 0.7;
-            p2.x += moveX * 0.7;
-            p2.y += moveY * 0.7;
-
-            // Add liquid splash - upward burst
-            p1.vy -= 0.08;
-            p2.vy -= 0.08;
-
-            // Create ripple on collision
-            if (p1.landed && p2.landed) {
-              this.ripples.push({
-                x: (p1.x + p2.x) / 2,
-                y: (p1.y + p2.y) / 2,
-                radius: 0,
-                maxRadius: 50,
-                life: 0.8,
-                decay: 0.02
-              });
-            }
+            p1.x -= moveX * 0.5;
+            p1.y -= moveY * 0.5;
+            p2.x += moveX * 0.5;
+            p2.y += moveY * 0.5;
           }
         }
       }
@@ -240,24 +212,6 @@ class FallingWordsAnimation {
   draw() {
     // Clear canvas completely
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    // Draw ripples (water effect)
-    this.ripples.forEach((ripple, idx) => {
-      ripple.radius += 0.8;
-      ripple.life -= ripple.decay;
-
-      if (ripple.life > 0 && ripple.radius < ripple.maxRadius) {
-        const alpha = ripple.life * 0.4;
-        this.ctx.strokeStyle = `rgba(26, 26, 26, ${alpha})`;
-        this.ctx.lineWidth = 1.5;
-        this.ctx.beginPath();
-        this.ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
-        this.ctx.stroke();
-      }
-    });
-
-    // Remove dead ripples
-    this.ripples = this.ripples.filter(r => r.life > 0 && r.radius < r.maxRadius);
 
     // Draw words
     this.ctx.font = this.fontFamily;
