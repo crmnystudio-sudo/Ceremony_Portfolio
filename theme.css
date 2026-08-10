@@ -1,0 +1,113 @@
+:root {
+  --cream: #ffffff;
+  --ink: #1a1a1a;
+  --mid: #888;
+  --gap: 6px;
+  --bg-light: #e8e5df;
+  --border: #d8d4ce;
+}
+
+:root.dark-mode {
+  --cream: #1a1a1a;
+  --ink: #ffffff;
+  --mid: #999;
+  --bg-light: #2a2a2a;
+  --border: #333333;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+nav {
+  background: var(--cream);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-links a {
+  color: var(--ink);
+}
+
+.grid-item {
+  background: var(--bg-light);
+}
+
+#about {
+  border-top: 1px solid var(--border);
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  background: var(--cream);
+}
+
+footer span {
+  color: var(--mid);
+}
+
+.about-meta,
+.case-study-label,
+.case-study-meta {
+  color: var(--mid);
+}
+
+.about-text p,
+.case-study-description {
+  color: var(--ink);
+}
+
+.case-study-value {
+  color: var(--ink);
+}
+
+#caseStudyModal {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.case-study {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.carousel-btn {
+  background: var(--ink);
+  color: var(--cream);
+  border: 1px solid var(--ink);
+}
+
+.carousel-btn:hover {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.close-btn {
+  color: var(--ink);
+}
+
+.close-btn:hover {
+  opacity: 0.5;
+}
+
+.wave-divider path {
+  stroke: var(--border);
+}
+
+/* Theme toggle button */
+#themeToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  transition: transform 0.3s ease;
+}
+
+#themeToggle:hover {
+  transform: scale(1.1);
+}
