@@ -10,10 +10,13 @@ class FallingWordsAnimation {
     this.wordIndex = 0;
 
     this.gravity = 0.15;
-    this.friction = 0.99;
-    this.bounce = 0.3;
-    this.spawnInterval = 1000;
+    this.friction = 0.98;
+    this.bounce = 0.2;
+    this.spawnInterval = 800;
     this.lastSpawnTime = 0;
+    this.animationStartTime = 0;
+    this.spawnDuration = 15000; // 15 seconds
+    this.isSpawning = true;
 
     this.fontSize = 16;
     this.fontFamily = 'bold 16px Palatino Linotype, serif';
@@ -37,6 +40,7 @@ class FallingWordsAnimation {
       this.wordList = lines.slice(1).map(l => l.trim()).filter(l => l.length > 0);
 
       if (this.wordList.length > 0) {
+        this.animationStartTime = Date.now();
         this.animate();
       }
     } catch (err) {
@@ -55,13 +59,25 @@ class FallingWordsAnimation {
     this.ctx.font = this.fontFamily;
     const metrics = this.ctx.measureText(text);
     return {
-      width: metrics.width + 12,
-      height: this.fontSize + 8
+      width: metrics.width + 4,
+      height: this.fontSize + 4
     };
   }
 
   spawnWord() {
     const now = Date.now();
+    const elapsed = now - this.animationStartTime;
+
+    // Check if spawn period is over
+    if (elapsed > this.spawnDuration) {
+      if (this.isSpawning) {
+        this.isSpawning = false;
+        // Wait for particles to settle
+        setTimeout(() => this.reset(), 2000);
+      }
+      return;
+    }
+
     if (now - this.lastSpawnTime < this.spawnInterval) return;
     this.lastSpawnTime = now;
 
@@ -69,9 +85,10 @@ class FallingWordsAnimation {
     if (!word) return;
 
     const dims = this.measureText(word);
-    const x = this.canvas.width / 2 + (Math.random() - 0.5) * 80;
+    const centerX = this.canvas.width / 2;
+    const x = centerX + (Math.random() - 0.5) * 120;
     const y = -dims.height;
-    const vx = (Math.random() - 0.5) * 1;
+    const vx = (Math.random() - 0.5) * 0.8;
     const vy = 0;
 
     this.particles.push({
@@ -83,6 +100,14 @@ class FallingWordsAnimation {
       ...dims,
       landed: false
     });
+  }
+
+  reset() {
+    this.particles = [];
+    this.wordIndex = 0;
+    this.isSpawning = true;
+    this.animationStartTime = Date.now();
+    this.lastSpawnTime = 0;
   }
 
   checkBounds(p1, p2) {
@@ -100,34 +125,50 @@ class FallingWordsAnimation {
   }
 
   updatePhysics() {
+    const centerX = this.canvas.width / 2;
+    const hillRadius = 180;
+
     this.particles.forEach(p => {
       p.vy += this.gravity;
       p.x += p.vx;
       p.y += p.vy;
       p.vx *= this.friction;
 
-      const bottom = this.canvas.height - p.height / 2;
+      const bottom = this.canvas.height - p.height / 2 - 10;
       if (p.y > bottom) {
         p.y = bottom;
         p.vy *= -this.bounce;
         p.landed = true;
+
+        // Gentle push toward center to form hill
+        const distFromCenter = Math.abs(p.x - centerX);
+        if (distFromCenter > 20) {
+          const pushDir = p.x > centerX ? -1 : 1;
+          p.vx += pushDir * 0.05;
+        }
       }
 
-      if (p.x - p.width / 2 < 0) {
-        p.x = p.width / 2;
-        p.vx *= -0.6;
+      // Soft boundaries
+      const leftBound = 30;
+      const rightBound = this.canvas.width - 30;
+
+      if (p.x < leftBound) {
+        p.x = leftBound;
+        p.vx *= -0.4;
       }
-      if (p.x + p.width / 2 > this.canvas.width) {
-        p.x = this.canvas.width - p.width / 2;
-        p.vx *= -0.6;
+      if (p.x > rightBound) {
+        p.x = rightBound;
+        p.vx *= -0.4;
       }
 
-      if (Math.abs(p.vy) < 0.05 && p.landed) {
+      // Stop when at rest
+      if (Math.abs(p.vy) < 0.05 && Math.abs(p.vx) < 0.05 && p.landed) {
         p.vy = 0;
+        p.vx = 0;
       }
     });
 
-    // Collision detection
+    // Collision detection - improved for better stacking
     for (let i = 0; i < this.particles.length; i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
         if (this.checkBounds(this.particles[i], this.particles[j])) {
@@ -147,15 +188,16 @@ class FallingWordsAnimation {
 
           if (dvDot > 0) continue;
 
-          const impulse = dvDot / 2;
+          const impulse = dvDot / 2.2;
           p1.vx += impulse * nx;
           p1.vy += impulse * ny;
           p2.vx -= impulse * nx;
           p2.vy -= impulse * ny;
 
-          const overlap = (p1.width + p2.width) / 2 - dist;
-          const moveX = (nx * overlap) / 2 + 0.1;
-          const moveY = (ny * overlap) / 2 + 0.1;
+          const minDist = (p1.width + p2.width) / 2;
+          const overlap = minDist - dist;
+          const moveX = (nx * overlap) / 2 + 0.05;
+          const moveY = (ny * overlap) / 2 + 0.05;
           p1.x -= moveX;
           p1.y -= moveY;
           p2.x += moveX;
@@ -172,27 +214,14 @@ class FallingWordsAnimation {
     this.ctx.font = this.fontFamily;
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
+    this.ctx.fillStyle = '#1a1a1a';
 
     this.particles.forEach(p => {
-      // Draw background pill
-      this.ctx.fillStyle = 'rgba(216, 212, 206, 0.9)';
-      this.ctx.beginPath();
-      this.ctx.roundRect(
-        p.x - p.width / 2,
-        p.y - p.height / 2,
-        p.width,
-        p.height,
-        4
-      );
-      this.ctx.fill();
-
-      // Draw text
-      this.ctx.fillStyle = '#1a1a1a';
       this.ctx.fillText(p.word, p.x, p.y);
     });
 
     // Remove off-screen particles
-    this.particles = this.particles.filter(p => p.y < this.canvas.height + 50);
+    this.particles = this.particles.filter(p => p.y < this.canvas.height + 100);
   }
 
   animate = () => {
