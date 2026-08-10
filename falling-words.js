@@ -10,10 +10,10 @@ class FallingWordsAnimation {
     this.wordList = [];
     this.wordIndex = 0;
 
-    this.gravity = 0.06;
-    this.friction = 0.90;
-    this.bounce = 0.02;
-    this.spawnInterval = 1000;
+    this.gravity = 0.03;
+    this.friction = 0.94;
+    this.bounce = 0.01;
+    this.spawnInterval = 1500;
     this.lastSpawnTime = 0;
     this.animationStartTime = 0;
     this.spawnDuration = 15000; // 15 seconds
@@ -87,12 +87,12 @@ class FallingWordsAnimation {
 
     const dims = this.measureText(word);
     const centerX = this.canvas.width / 2;
-    const x = centerX + (Math.random() - 0.5) * 120;
+    const x = centerX + (Math.random() - 0.5) * 80;
     const y = -dims.height;
-    const vx = (Math.random() - 0.5) * 0.5;
+    const vx = (Math.random() - 0.5) * 0.2;
     const vy = 0;
     const rotation = 0;
-    const rotationVelocity = (Math.random() - 0.5) * 0.03;
+    const rotationVelocity = (Math.random() - 0.5) * 0.012;
 
     this.particles.push({
       word,
@@ -140,7 +140,7 @@ class FallingWordsAnimation {
       p.vx *= this.friction;
       p.rotation += p.rotationVelocity;
       if (p.landed) {
-        p.rotationVelocity *= 0.97;
+        p.rotationVelocity *= 0.99;
       }
 
       const bottom = this.canvas.height - p.height / 2 - 10;
@@ -154,19 +154,19 @@ class FallingWordsAnimation {
             x: p.x,
             y: p.y,
             radius: 0,
-            maxRadius: 60,
+            maxRadius: 80,
             life: 1.0,
-            decay: 0.04
+            decay: 0.015
           });
         }
 
         p.landed = true;
 
-        // Gentle push toward center to form hill
+        // Very gentle push toward center to form hill
         const distFromCenter = Math.abs(p.x - centerX);
-        if (distFromCenter > 20) {
+        if (distFromCenter > 30) {
           const pushDir = p.x > centerX ? -1 : 1;
-          p.vx += pushDir * 0.05;
+          p.vx += pushDir * 0.01;
         }
       }
 
@@ -206,13 +206,13 @@ class FallingWordsAnimation {
             const nx = dx / dist;
             const ny = dy / dist;
             const overlap = minDist - dist;
-            const moveX = (nx * overlap) / 2;
-            const moveY = (ny * overlap) / 2;
+            const moveX = (nx * overlap) / 3;
+            const moveY = (ny * overlap) / 3;
 
-            p1.x -= moveX;
-            p1.y -= moveY;
-            p2.x += moveX;
-            p2.y += moveY;
+            p1.x -= moveX * 0.5;
+            p1.y -= moveY * 0.5;
+            p2.x += moveX * 0.5;
+            p2.y += moveY * 0.5;
           }
         }
       }
@@ -225,7 +225,7 @@ class FallingWordsAnimation {
 
     // Draw ripples (water effect)
     this.ripples.forEach((ripple, idx) => {
-      ripple.radius += 2;
+      ripple.radius += 0.8;
       ripple.life -= ripple.decay;
 
       if (ripple.life > 0 && ripple.radius < ripple.maxRadius) {
