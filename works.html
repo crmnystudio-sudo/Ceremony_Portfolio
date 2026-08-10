@@ -650,7 +650,7 @@
 
       let mediaHtml = '';
       if (isVideo && currentVideos.length > 0) {
-        mediaHtml = `<video id="caseStudyVideo" controls style="width: 100%; height: auto;"><source src="${currentVideos[0]}" type="video/mp4"></video>`;
+        mediaHtml = `<video id="caseStudyVideo" controls preload="metadata" style="width: 100%; height: 100%;"><source src="${currentVideos[0]}" type="video/mp4">Your browser does not support the video tag.</video>`;
       } else if (project.video_link) {
         mediaHtml = `<img src="${project.video_link}" style="width: 100%; height: auto;" onerror="this.src='Assets/favicon-32.png'">`;
       }
@@ -720,16 +720,16 @@
         const media = document.getElementById('caseStudyMedia');
 
         const setAspectRatio = () => {
-          if (video.videoWidth && video.videoHeight) {
-            const ratio = video.videoWidth / video.videoHeight;
-            media.style.setProperty('--aspect-ratio', `${video.videoWidth} / ${video.videoHeight}`);
-          }
+          setTimeout(() => {
+            if (video && video.videoWidth && video.videoHeight) {
+              media.style.setProperty('--aspect-ratio', `${video.videoWidth} / ${video.videoHeight}`);
+            }
+          }, 100);
         };
 
+        video.addEventListener('loadedmetadata', setAspectRatio);
         if (video.readyState >= 1) {
           setAspectRatio();
-        } else {
-          video.addEventListener('loadedmetadata', setAspectRatio, { once: true });
         }
       }
 
@@ -754,23 +754,19 @@
       const video = document.getElementById('caseStudyVideo');
       const media = document.getElementById('caseStudyMedia');
       if (video && currentVideos[currentVideoIndex]) {
-        video.src = currentVideos[currentVideoIndex];
+        const newSrc = currentVideos[currentVideoIndex];
+        video.querySelector('source').src = newSrc;
         video.load();
+        video.play().catch(() => {});
 
-        // Update aspect ratio when video metadata loads
-        const updateAspectRatio = () => {
+        const setAspectRatio = () => {
           if (video.videoWidth && video.videoHeight) {
             media.style.setProperty('--aspect-ratio', `${video.videoWidth} / ${video.videoHeight}`);
           }
         };
 
-        if (video.readyState >= 1) {
-          updateAspectRatio();
-        } else {
-          video.addEventListener('loadedmetadata', updateAspectRatio, { once: true });
-        }
+        video.addEventListener('loadedmetadata', setAspectRatio, { once: true });
 
-        video.play().catch(() => {});
         document.getElementById('videoCounter').textContent = currentVideoIndex + 1;
         updateCarouselButtons();
       }
