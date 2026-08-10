@@ -16,8 +16,7 @@ class FallingWordsAnimation {
     this.spawnInterval = 1500;
     this.lastSpawnTime = 0;
     this.animationStartTime = 0;
-    this.spawnDuration = 15000; // 15 seconds
-    this.isSpawning = true;
+    this.wordLifetime = 8000; // 8 seconds lifetime per word before fade
 
     this.fontSize = 16;
     this.fontFamily = 'bold 16px Palatino Linotype, serif';
@@ -67,17 +66,6 @@ class FallingWordsAnimation {
 
   spawnWord() {
     const now = Date.now();
-    const elapsed = now - this.animationStartTime;
-
-    // Check if spawn period is over
-    if (elapsed > this.spawnDuration) {
-      if (this.isSpawning) {
-        this.isSpawning = false;
-        // Wait for particles to settle
-        setTimeout(() => this.reset(), 2000);
-      }
-      return;
-    }
 
     if (now - this.lastSpawnTime < this.spawnInterval) return;
     this.lastSpawnTime = now;
@@ -93,6 +81,7 @@ class FallingWordsAnimation {
     const vy = 0;
     const rotation = 0;
     const rotationVelocity = (Math.random() - 0.5) * 0.012;
+    const spawnTime = now;
 
     this.particles.push({
       word,
@@ -103,7 +92,8 @@ class FallingWordsAnimation {
       rotation,
       rotationVelocity,
       ...dims,
-      landed: false
+      landed: false,
+      spawnTime
     });
   }
 
@@ -215,13 +205,27 @@ class FallingWordsAnimation {
     // Clear canvas completely
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    const now = Date.now();
+
     // Draw words
     this.ctx.font = this.fontFamily;
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
-    this.ctx.fillStyle = '#1a1a1a';
 
     this.particles.forEach(p => {
+      // Calculate lifetime and opacity
+      const age = now - p.spawnTime;
+      const fadeStartTime = this.wordLifetime * 0.6; // Start fading at 60% of lifetime
+      let opacity = 1;
+
+      if (age > fadeStartTime) {
+        const fadeTime = this.wordLifetime - fadeStartTime;
+        const fadeProgress = (age - fadeStartTime) / fadeTime;
+        opacity = Math.max(0, 1 - fadeProgress);
+      }
+
+      this.ctx.fillStyle = `rgba(26, 26, 26, ${opacity})`;
+
       if (Math.abs(p.rotation) > 0.001) {
         // Save context, translate, rotate, draw, restore
         this.ctx.save();
@@ -234,8 +238,11 @@ class FallingWordsAnimation {
       }
     });
 
-    // Remove off-screen particles
-    this.particles = this.particles.filter(p => p.y < this.canvas.height + 100);
+    // Remove dead and off-screen particles
+    this.particles = this.particles.filter(p => {
+      const age = now - p.spawnTime;
+      return age < this.wordLifetime && p.y < this.canvas.height + 100;
+    });
   }
 
   animate = () => {
