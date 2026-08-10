@@ -8,11 +8,11 @@
 }
 
 :root.dark-mode {
-  --cream: #1a1a1a;
+  --cream: #000000;
   --ink: #ffffff;
   --mid: #999;
-  --bg-light: #2a2a2a;
-  --border: #333333;
+  --bg-light: #1a1a1a;
+  --border: #2a2a2a;
 }
 
 body {
@@ -103,9 +103,6 @@ footer span {
   filter: invert(1) brightness(1.1);
 }
 
-:root.dark-mode .about-image img {
-  filter: invert(0.95) brightness(1.05);
-}
 
 :root.dark-mode .contact-icon {
   stroke: var(--ink);
