@@ -120,7 +120,3 @@ footer span {
   justify-content: center;
   color: var(--ink);
 }
-
-#themeToggle:hover {
-  transform: scale(1.05);
-}
