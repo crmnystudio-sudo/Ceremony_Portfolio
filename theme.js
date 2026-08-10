@@ -6,6 +6,8 @@ function initTheme() {
   if (savedTheme === 'dark') {
     root.classList.add('dark-mode');
     updateToggleIcon(true);
+  } else {
+    updateToggleIcon(false);
   }
 }
 
