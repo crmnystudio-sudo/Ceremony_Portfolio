@@ -3,6 +3,9 @@ function initTheme() {
   const savedTheme = localStorage.getItem('theme') || 'light';
   const root = document.documentElement;
 
+  // Remove dark-mode class first to ensure light mode is default
+  root.classList.remove('dark-mode');
+
   if (savedTheme === 'dark') {
     root.classList.add('dark-mode');
     updateToggleIcon(true);

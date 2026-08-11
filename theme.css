@@ -73,6 +73,7 @@ footer span {
 .case-study {
   background: var(--cream);
   color: var(--ink);
+  border-radius: 12px;
 }
 
 .carousel-btn {
