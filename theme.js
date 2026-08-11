@@ -1,17 +1,13 @@
 // Initialize theme on page load
 function initTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'light';
   const root = document.documentElement;
 
-  // Remove dark-mode class first to ensure light mode is default
-  root.classList.remove('dark-mode');
+  // Always start with light mode as default
+  localStorage.setItem('theme', 'light');
 
-  if (savedTheme === 'dark') {
-    root.classList.add('dark-mode');
-    updateToggleIcon(true);
-  } else {
-    updateToggleIcon(false);
-  }
+  // Remove dark-mode class to force light mode
+  root.classList.remove('dark-mode');
+  updateToggleIcon(false);
 }
 
 // Update toggle icon based on theme
