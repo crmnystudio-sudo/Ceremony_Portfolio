@@ -62,11 +62,11 @@ footer span {
 }
 
 .modal {
-  background: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
 :root.dark-mode .modal {
-  background: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7) !important;
 }
 
 .case-study {
