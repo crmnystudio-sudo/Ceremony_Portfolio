@@ -61,8 +61,12 @@ footer span {
   color: var(--ink);
 }
 
-#caseStudyModal {
-  background: rgba(0, 0, 0, 0.7);
+.modal {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+:root.dark-mode .modal {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .case-study {
