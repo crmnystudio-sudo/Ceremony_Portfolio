@@ -28,16 +28,19 @@ A password-protected portfolio website featuring dynamic project loading from CS
 
 ## Password
 
-Default password: `ceremony`
+Default password: `ceremony26`
 
 ## Files
 
 - `index.html` - Password entry page
-- `home.html` - Featured projects (8 items)
-- `works.html` - All projects with case studies
-- `about.html` - Studio information
-- `contact.html` - Contact details
+- `home.html` - Featured projects (15 items, animated falling text)
+- `works.html` - All projects with case studies and modal galleries
+- `about.html` - Studio information with animated dividers
+- `contact.html` - Contact details with animated dividers
 - `data/projects.csv` - Project data
+- `data/about.csv` - About page content
+- `data/contact.csv` - Contact page content
+- `data/words.csv` - Words for falling animation
 - `Assets/` - Images, videos, fonts
 
 ## Development
