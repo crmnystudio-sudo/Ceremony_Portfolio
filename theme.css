@@ -34,11 +34,9 @@ nav {
 }
 
 #about {
-  border-top: 1px solid var(--border);
 }
 
 footer {
-  border-top: 1px solid var(--border);
   background: var(--cream);
 }
 
